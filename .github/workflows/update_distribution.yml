@@ -1,4 +1,4 @@
-name: Update LLAPI Distribution
+name: Update LLAPI Folder
 
 on:
   schedule:
@@ -14,14 +14,14 @@ jobs:
       with:
         ref: develop
 
-    - name: Update LLAPI Distribution
+    - name: Update LLAPI Folder
       run: |
         set -euo pipefail
         git config --global user.email "theypsilon@gmail.com"
         git config --global user.name "The CI/CD Bot"
         ./.github/update_distribution.sh . --push
       env:
-        DB_ID: distribution_llapi
-        DB_URL: https://raw.githubusercontent.com/theypsilon/BetaDistrib5/main/llapidb.json.zip
-        BASE_FILES_URL: https://raw.githubusercontent.com/theypsilon/BetaDistrib5/%s/
-        LATEST_ZIP_URL: https://github.com/theypsilon/BetaDistrib5/archive/refs/heads/main.zip
+        DB_ID: llapi_folder
+        DB_URL: https://raw.githubusercontent.com/theypsilon/LLAPI_Folder_MiSTer/main/llapidb.json.zip
+        BASE_FILES_URL: https://raw.githubusercontent.com/theypsilon/LLAPI_Folder_MiSTer/%s/
+        LATEST_ZIP_URL: https://github.com/theypsilon/LLAPI_Folder_MiSTer/archive/refs/heads/main.zip
