@@ -1,0 +1,27 @@
+name: Update LLAPI Distribution
+
+on:
+  schedule:
+  - cron:  "*/20 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: develop
+
+    - name: Update LLAPI Distribution
+      run: |
+        set -euo pipefail
+        git config --global user.email "theypsilon@gmail.com"
+        git config --global user.name "The CI/CD Bot"
+        ./.github/update_distribution.sh . --push
+      env:
+        DB_ID: distribution_llapi
+        DB_URL: https://raw.githubusercontent.com/theypsilon/BetaDistrib5/main/llapidb.json.zip
+        BASE_FILES_URL: https://raw.githubusercontent.com/theypsilon/BetaDistrib5/%s/
+        LATEST_ZIP_URL: https://github.com/theypsilon/BetaDistrib5/archive/refs/heads/main.zip
