@@ -22,6 +22,6 @@ jobs:
         ./.github/update_distribution.sh . --push
       env:
         DB_ID: llapi_folder
-        DB_URL: https://raw.githubusercontent.com/theypsilon/LLAPI_Folder_MiSTer/main/llapidb.json.zip
-        BASE_FILES_URL: https://raw.githubusercontent.com/theypsilon/LLAPI_Folder_MiSTer/%s/
-        LATEST_ZIP_URL: https://github.com/theypsilon/LLAPI_Folder_MiSTer/archive/refs/heads/main.zip
+        DB_URL: https://raw.githubusercontent.com/MiSTer-LLAPI/LLAPI_folder_MiSTer/main/llapidb.json.zip
+        BASE_FILES_URL: https://raw.githubusercontent.com/MiSTer-LLAPI/LLAPI_folder_MiSTer/%s/
+        LATEST_ZIP_URL: https://github.com/MiSTer-LLAPI/LLAPI_folder_MiSTer/archive/refs/heads/main.zip
