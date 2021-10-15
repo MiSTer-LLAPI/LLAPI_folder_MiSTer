@@ -61,7 +61,8 @@ def create_db(folder, options):
         "latest_zip_url": options['latest_zip_url'],
         "time": run_stdout("git log -1 --format=%cd --date=format:'%Y/%m/%d %H:%M:%S'").strip(),
         "files": dict(),
-        "zips": dict()
+        "zips": dict(),
+        "base_files_url": ""
     }
 
     delete_list_regex = re.compile("^(.*_)[0-9]{8}(\.[a-zA-Z0-9]+)*$", )
