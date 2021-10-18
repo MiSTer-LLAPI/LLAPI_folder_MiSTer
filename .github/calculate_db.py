@@ -69,7 +69,7 @@ def create_db(folder, options):
 
     for file in finder.find_all():
         strfile = str(file)
-        folders[str(file.parent)] = True
+        folders[str(file.parent)] = {}
 
         if file.name == ".delme":
             continue
@@ -87,7 +87,7 @@ def create_db(folder, options):
 
     folders.pop(folder, None)
 
-    db["folders"] = sorted(list(folders.keys()))
+    db["folders"] = folders
     db["files_count"] = len(db["files"])
     db["folders_count"] = len(db["folders"])
 
