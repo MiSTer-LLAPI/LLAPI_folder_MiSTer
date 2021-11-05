@@ -62,7 +62,9 @@ def create_db(folder, options):
         "time": run_stdout("git log -1 --format=%cd --date=format:'%Y/%m/%d %H:%M:%S'").strip(),
         "files": dict(),
         "zips": dict(),
-        "base_files_url": ""
+        "base_files_url": "",
+        "default_options": dict(),
+        "timestamp": int(time.time())
     }
 
     delete_list_regex = re.compile("^(.*_)[0-9]{8}(\.[a-zA-Z0-9]+)*$", )
