@@ -8,6 +8,9 @@ curl -o /tmp/update_distribution.source "https://raw.githubusercontent.com/MiSTe
 source /tmp/update_distribution.source
 rm /tmp/update_distribution.source
 
+curl -o /tmp/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
+chmod +x /tmp/calculate_db.py
+
 update_distribution() {
     local OUTPUT_FOLDER="${1}"
     local PUSH_COMMAND="${2:-}"
@@ -19,21 +22,16 @@ update_distribution() {
     done
 
     if [[ "${PUSH_COMMAND}" == "--push" ]] ; then
-        git checkout -f develop -b main 
+        git checkout -f develop -b main
+        echo "Running detox"
+        detox -v -s utf_8-only -r *
+        echo "Detox done"
         git add "${OUTPUT_FOLDER}"
         git commit -m "-"
         git fetch origin main || true
         if ! git diff --exit-code main origin/main^ ; then
-            export DB_ID="${DB_ID}"
-            export DB_URL="${DB_URL}"
-            export BASE_FILES_URL="${BASE_FILES_URL}"
-            export LATEST_ZIP_URL="${LATEST_ZIP_URL}"
-
-            echo
-            echo "There are changes to push."
-            echo
-
-            ./.github/calculate_db.py
+            echo "Calculating db..."
+            /tmp/calculate_db.py
         else
             echo "Nothing to be updated."
         fi
