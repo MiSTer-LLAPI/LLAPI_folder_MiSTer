@@ -21,21 +21,19 @@ update_distribution() {
         process_url "${url}" "${OUTPUT_FOLDER}"
     done
 
-    if [[ "${PUSH_COMMAND}" == "--push" ]] ; then
-        git checkout -f develop -b main
-        echo "Running detox"
-        detox -v -s utf_8-only -r *
-        echo "Detox done"
-        git add "${OUTPUT_FOLDER}"
-        git commit -m "-"
-        git fetch origin main || true
-        if ! git diff --exit-code main origin/main^ ; then
-            echo "Calculating db..."
-            /tmp/calculate_db.py
-        else
-            echo "Nothing to be updated."
-        fi
+    if [[ "${PUSH_COMMAND}" != "--push" ]] ; then
+        return
     fi
+    
+    git checkout -f develop -b main
+    echo "Running detox"
+    detox -v -s utf_8-only -r *
+    echo "Detox done"
+    git add "${OUTPUT_FOLDER}"
+    git commit -m "-"
+    git fetch origin main || true
+    echo "Calculating db..."
+    /tmp/calculate_db.py
 }
 
 files_with_stripped_date() {
