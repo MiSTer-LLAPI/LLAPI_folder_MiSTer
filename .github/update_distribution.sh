@@ -25,6 +25,7 @@ update_distribution() {
         return
     fi
     
+    rm -rf docs games || true
     git checkout -f develop -b main
     echo "Running detox"
     detox -v -s utf_8-only -r *
