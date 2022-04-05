@@ -8,8 +8,8 @@ curl -o /tmp/update_distribution.source "https://raw.githubusercontent.com/MiSTe
 source /tmp/update_distribution.source
 rm /tmp/update_distribution.source
 
-curl -o /tmp/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
-chmod +x /tmp/calculate_db.py
+curl -o .github/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
+chmod +x .github/calculate_db.py
 
 files_with_stripped_date() {
     local FOLDER="${1}"
