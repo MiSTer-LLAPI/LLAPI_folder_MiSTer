@@ -11,32 +11,6 @@ rm /tmp/update_distribution.source
 curl -o /tmp/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
 chmod +x /tmp/calculate_db.py
 
-update_distribution() {
-    local OUTPUT_FOLDER="${1}"
-    local PUSH_COMMAND="${2:-}"
-
-    fetch_core_urls
-
-    for url in ${CORE_URLS[@]} ; do
-        process_url "${url}" "${OUTPUT_FOLDER}"
-    done
-
-    if [[ "${PUSH_COMMAND}" != "--push" ]] ; then
-        return
-    fi
-    
-    rm -rf docs games || true
-    git checkout -f develop -b main
-    echo "Running detox"
-    detox -v -s utf_8-only -r *
-    echo "Detox done"
-    git add "${OUTPUT_FOLDER}"
-    git commit -m "-"
-    git fetch origin main || true
-    echo "Calculating db..."
-    /tmp/calculate_db.py
-}
-
 files_with_stripped_date() {
     local FOLDER="${1}"
     pushd "${FOLDER}" > /dev/null 2>&1
@@ -52,29 +26,73 @@ files_with_stripped_date() {
 CORE_URLS=
 fetch_core_urls() {
     local MISTER_URL="https://github.com/MiSTer-LLAPI/Updater_script_MiSTer"
-    CORE_URLS=$(curl -sSLf "$MISTER_URL/wiki"| grep -ioE '(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer/tree/[_a-zA-Z0-9-]+)|(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer)|(user-content-[a-zA-Z0-9-]*)' | sed '/^.*Updater_script_MiSTer.*/d' | sed '/^user-.*/d')
+    CORE_URLS="user-content-consoles---classic"$'\n'$(curl -sSLf "$MISTER_URL/wiki"| grep -ioE '(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer/tree/[_a-zA-Z0-9-]+)|(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer)|(user-content-[a-zA-Z0-9-]*)' | sed '/^.*Updater_script_MiSTer.*/d' | sed '/^user-.*/d')
+    CORE_URLS=${CORE_URLS}$'\n'"user-content-arcade-cores"$'\n'$(curl -sSLf "$MISTER_URL/wiki/Arcade-Cores-List"| grep -ioE '(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer/tree/[_a-zA-Z0-9-]+)|(https://github.com/[a-zA-Z0-9./_-]*[_-]MiSTer)|(user-content-[a-zA-Z0-9-]*)' | sed '/^.*Updater_script_MiSTer.*/d' | sed '/^user-.*/d')
 }
 
-process_url() {
-    local URL="${1}"
+install_console_core() {
+    local TMP_FOLDER="${1}"
     local TARGET_DIR="${2}"
+    local IFS=$'\n'
 
-    if ! [[ ${URL} =~ ^([a-zA-Z]+://)?github.com(:[0-9]+)?/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)(/tree/([a-zA-Z0-9_-]+))?$ ]] ; then
-        >&2 echo "WARNING! Wrong repository url '${URL}'."
+    if [ ! -d "${TMP_FOLDER}/releases" ] ; then
         return
     fi
 
-    local GITHUB_OWNER="${BASH_REMATCH[3]}"
-    local GITHUB_REPO="${BASH_REMATCH[4]}"
-    local GITHUB_BRANCH="${BASH_REMATCH[6]:-}"
+    for bin in $(files_with_stripped_date "${TMP_FOLDER}/releases" | uniq) ; do
 
-    local TMP_FOLDER="$(mktemp -d)"
+        if is_arcade_core "${bin}" ; then
+            continue
+        fi
+        
+        get_latest_release "${TMP_FOLDER}" "${bin}"
+        local LAST_RELEASE_FILE="${GET_LATEST_RELEASE_RET}"
 
-    download_repository "${TMP_FOLDER}" "https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}.git" "${GITHUB_BRANCH}"
+        if is_not_rbf_release "${LAST_RELEASE_FILE}" ; then
+            continue
+        fi
 
-    install_other_core "${TMP_FOLDER}" "${TARGET_DIR}" "_LLAPI"
+        copy_file "${TMP_FOLDER}/releases/${LAST_RELEASE_FILE}" "${TARGET_DIR}/_LLAPI/${LAST_RELEASE_FILE}"
+    done
+}
 
-    rm -rf "${TMP_FOLDER}"
+install_arcade_core() {
+    local TMP_FOLDER="${1}"
+    local TARGET_DIR="${2}"
+    local IFS=$'\n'
+
+    if [ ! -d "${TMP_FOLDER}/releases" ] ; then
+        return
+    fi
+
+    local BINARY_NAMES=$(files_with_stripped_date "${TMP_FOLDER}/releases" | uniq)
+    if [[ "${BINARY_NAMES}" == "MRA-Alternatives" ]] ; then
+        return
+    fi
+    
+    local ARCADE_INSTALLED="false"
+
+    for bin in ${BINARY_NAMES} ; do
+
+        get_latest_release "${TMP_FOLDER}" "${bin}"
+        local LAST_RELEASE_FILE="${GET_LATEST_RELEASE_RET}"
+
+        if is_not_rbf_release "${LAST_RELEASE_FILE}" ; then
+            continue
+        fi
+
+        if is_arcade_core "${bin}" ; then
+            ARCADE_INSTALLED="true"
+        elif [[ "${ARCADE_INSTALLED}" == "true" ]] ; then
+            continue
+        fi
+
+        copy_file "${TMP_FOLDER}/releases/${LAST_RELEASE_FILE}" "${TARGET_DIR}/_LLAPI/cores/${LAST_RELEASE_FILE#Arcade-}"
+    done
+
+    for mra in $(mra_files "${TMP_FOLDER}/releases") ; do
+        copy_file "${TMP_FOLDER}/releases/${mra}" "${TARGET_DIR}/_LLAPI/_Arcade/${mra}"
+    done
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
