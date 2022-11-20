@@ -1,6 +1,9 @@
 name: Update LLAPI Folder
 
 on:
+  push:
+    branches:
+      - develop
   schedule:
   - cron:  "*/20 * * * *"
   workflow_dispatch:
@@ -33,7 +36,7 @@ jobs:
     - name: Commit LLAPI Folder
       run: |
         set -euo pipefail
-        curl -o github/commit_distribution.sh "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/commit_distribution.sh"
+        curl -o .github/commit_distribution.sh "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/commit_distribution.sh"
         chmod +x .github/commit_distribution.sh
         ./.github/commit_distribution.sh
 
