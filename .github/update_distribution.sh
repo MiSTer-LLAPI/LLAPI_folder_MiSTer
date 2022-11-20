@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2021 José Manuel Barroso Galindo <theypsilon@gmail.com>
+# Copyright (c) 2021-2022 José Manuel Barroso Galindo <theypsilon@gmail.com>
 
 set -euo pipefail
 
@@ -7,9 +7,6 @@ curl -o /tmp/update_distribution.source "https://raw.githubusercontent.com/MiSTe
 
 source /tmp/update_distribution.source
 rm /tmp/update_distribution.source
-
-curl -o .github/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
-chmod +x .github/calculate_db.py
 
 files_with_stripped_date() {
     local FOLDER="${1}"
@@ -96,5 +93,5 @@ install_arcade_core() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
-    update_distribution "${1}" "${2:-}"
+    update_distribution "${1}" ""
 fi
