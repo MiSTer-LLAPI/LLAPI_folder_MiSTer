@@ -3,10 +3,7 @@
 
 set -euo pipefail
 
-curl -o /tmp/update_distribution.source "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/main/.github/update_distribution.sh"
-
-source /tmp/update_distribution.source
-rm /tmp/update_distribution.source
+source .github/update_distribution_devel.sh
 
 files_with_stripped_date() {
     local FOLDER="${1}"

@@ -41,11 +41,7 @@ jobs:
         git fetch origin main || true
 
     - name: Push LLAPI Folder DB
-      run: |
-        set -euo pipefail
-        curl -o .github/calculate_db.py "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/calculate_db.py"
-        chmod +x .github/calculate_db.py
-        ./.github/calculate_db.py
+      run: ./.github/calculate_db.py
       env:
         DB_ID: llapi_folder
         DB_URL: https://raw.githubusercontent.com/MiSTer-LLAPI/LLAPI_folder_MiSTer/main/llapidb.json.zip
