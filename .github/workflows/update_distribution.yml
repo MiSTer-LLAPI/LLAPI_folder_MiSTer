@@ -10,11 +10,11 @@ on:
 
 jobs:
   update:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Install apt-get utilities
-      run: sudo apt-get install detox sharutils
+      run: sudo apt-get install sharutils
 
     - uses: actions/setup-python@v2
       with:
@@ -35,10 +35,10 @@ jobs:
 
     - name: Commit LLAPI Folder
       run: |
-        set -euo pipefail
-        curl -o .github/commit_distribution.sh "https://raw.githubusercontent.com/MiSTer-devel/Distribution_MiSTer/develop/.github/commit_distribution.sh"
-        chmod +x .github/commit_distribution.sh
-        ./.github/commit_distribution.sh
+        git checkout -f develop -b main
+        git add .
+        git commit -m "-"
+        git fetch origin main || true
 
     - name: Push LLAPI Folder DB
       run: |
