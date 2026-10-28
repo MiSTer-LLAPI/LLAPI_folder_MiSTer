@@ -89,6 +89,27 @@ install_arcade_core() {
     done
 }
 
+
+# Experimental 1943 LLAPI pilot from the public jtcores release.
+# Keep these pinned to the reviewed binaries; never import all JTCORES games.
+install_1943_llapi_pilot() {
+    local TARGET_DIR="${1}"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1943-llapi-20261028-experimental"
+    local TMP_PILOT
+    TMP_PILOT="$(mktemp -d)"
+    curl -fsSL "${RELEASE_URL}/jt1943_llapi_20261028_test.rbf" -o "${TMP_PILOT}/jt1943_llapi_20261028.rbf"
+    curl -fsSL "${RELEASE_URL}/1943-LLAPI-Test.mra" -o "${TMP_PILOT}/1943-LLAPI-Test.mra"
+    printf '%s\n' \
+        '95a2bddf19d2d7c4ace8f0a5d784cb95533beab1bc3b5ffe7db1f356c23d42ce  jt1943_llapi_20261028.rbf' \
+        '9d996db060917e5b6775342a46a3c09176a390e78bb0fe947583e5a104e0d196  1943-LLAPI-Test.mra' \
+        | (cd "${TMP_PILOT}" && sha256sum -c -)
+    copy_file "${TMP_PILOT}/jt1943_llapi_20261028.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_20261028.rbf"
+    copy_file "${TMP_PILOT}/1943-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-Test.mra"
+    rm -rf "${TMP_PILOT}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
+    install_1943_llapi_pilot "${1}"
 fi
+
