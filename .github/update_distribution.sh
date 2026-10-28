@@ -108,8 +108,26 @@ install_1943_llapi_pilot() {
     rm -rf "${TMP_PILOT}"
 }
 
+# Additional experimental SNAC build; preserve the tested LLAPI-only entry.
+install_1943_llapi_snac_pilot() {
+    local TARGET_DIR="${1}"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1943-llapi-snac-20261028-experimental"
+    local TMP_PILOT
+    TMP_PILOT="$(mktemp -d)"
+    curl -fsSL "${RELEASE_URL}/jt1943_llapi_snac_20261028_test.rbf" -o "${TMP_PILOT}/jt1943_llapi_snac_20261028.rbf"
+    curl -fsSL "${RELEASE_URL}/1943-LLAPI-SNAC-Test.mra" -o "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra"
+    printf '%s\n' \
+        '5cce0c30c78d194cadbe6b167f97b65f5f381a72dd8f897a388fd1116900d9b1  jt1943_llapi_snac_20261028.rbf' \
+        'f67f5879f6d62aebf32492d5261dd7965691795dd11f652a5e8a947ade80da57  1943-LLAPI-SNAC-Test.mra' \
+        | (cd "${TMP_PILOT}" && sha256sum -c -)
+    copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261028.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261028.rbf"
+    copy_file "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-SNAC-Test.mra"
+    rm -rf "${TMP_PILOT}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
     install_1943_llapi_pilot "${1}"
+    install_1943_llapi_snac_pilot "${1}"
 fi
 
