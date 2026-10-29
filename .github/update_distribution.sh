@@ -168,7 +168,7 @@ DOC
 # Install only the named, timing-accepted 1944 experimental release.
 install_1944_llapi_snac_pilot() {
     local TARGET_DIR="${1}" TMP_PILOT
-    local TAG="v1944-llapi-snac-20261029-experimental"
+    local TAG="v1944-llapi-snac-20261029-autofire-experimental"
     local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${TAG}"
     TMP_PILOT="$(mktemp -d)"
     if ! curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${TAG}" -o "${TMP_PILOT}/release.json"; then
@@ -179,8 +179,8 @@ install_1944_llapi_snac_pilot() {
 import json,re,sys
 from pathlib import Path
 p=Path(sys.argv[1]); d=json.loads((p/'release.json').read_text())
-assert d['tag_name']=='v1944-llapi-snac-20261029-experimental' and not d['draft']
-names=['jt1944_llapi_snac_20261029_test.rbf','1944-LLAPI-Test.mra','timing-acceptance.json']
+assert d['tag_name']=='v1944-llapi-snac-20261029-autofire-experimental' and not d['draft']
+names=['jt1944_llapi_snac_20261029_autofire.rbf','1944-LLAPI-Test.mra','timing-acceptance.json']
 lines=[]
 for name in names:
     a=[a for a in d['assets'] if a['name']==name]
@@ -189,7 +189,7 @@ for name in names:
 (p/'accepted-assets.sha256').write_text('\n'.join(lines)+'\n')
 PYCODE
     local ASSET
-    for ASSET in jt1944_llapi_snac_20261029_test.rbf 1944-LLAPI-Test.mra timing-acceptance.json; do
+    for ASSET in jt1944_llapi_snac_20261029_autofire.rbf 1944-LLAPI-Test.mra timing-acceptance.json; do
         curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PILOT}/${ASSET}"
     done
     (cd "${TMP_PILOT}" && sha256sum -c accepted-assets.sha256)
@@ -204,7 +204,7 @@ m=ET.parse(p/'1944-LLAPI-Test.mra')
 assert m.findtext('rbf')=='jt1944_llapi_snac'
 assert m.findtext('setname')=='1944'
 PYCODE
-    copy_file "${TMP_PILOT}/jt1944_llapi_snac_20261029_test.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1944_llapi_snac_20261029_test.rbf"
+    copy_file "${TMP_PILOT}/jt1944_llapi_snac_20261029_autofire.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1944_llapi_snac_20261029_autofire.rbf"
     copy_file "${TMP_PILOT}/1944-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1944-LLAPI-Test.mra"
     rm -rf "${TMP_PILOT}"
 }
@@ -215,5 +215,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_amiga_experimental "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
