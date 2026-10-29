@@ -93,13 +93,13 @@ install_arcade_core() {
 # Current experimental controller test; replaces earlier updater pilots.
 install_1943_llapi_snac_pilot() {
     local TARGET_DIR="${1}"
-    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1943-llapi-snac-20261029-test"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1943-llapi-snac-20261029-2p"
     local TMP_PILOT
     TMP_PILOT="$(mktemp -d)"
     curl -fsSL "${RELEASE_URL}/jt1943_llapi_snac_20261029_test.rbf" -o "${TMP_PILOT}/jt1943_llapi_snac_20261029.rbf"
     curl -fsSL "${RELEASE_URL}/1943-LLAPI-SNAC-Test.mra" -o "${TMP_PILOT}/1943-LLAPI-Test.mra"
     printf '%s\n' \
-        '71f76aea1572e308503d49aab49faae976ff1cd5562644d7227fe864b899f52e  jt1943_llapi_snac_20261029.rbf' \
+        '6571e3d34449677502035f9b82af2bac0dc04c19268f32215c687264038a6e17  jt1943_llapi_snac_20261029.rbf' \
         'f67f5879f6d62aebf32492d5261dd7965691795dd11f652a5e8a947ade80da57  1943-LLAPI-Test.mra' \
         | (cd "${TMP_PILOT}" && sha256sum -c -)
     copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261029.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261029.rbf"
