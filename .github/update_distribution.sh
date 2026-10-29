@@ -145,38 +145,23 @@ PYCODE
 }
 
 
-# Explicit experimental Amiga variants; retain the existing stable Amiga core.
+# Experimental Amiga LLAPI only; SNAC variants withdrawn from this catalogue.
 install_amiga_experimental() {
-    local TARGET_DIR="${1}" TMP_AMIGA ASSET
+    local TARGET_DIR="${1}" TMP_AMIGA
     local RELEASE_URL="https://github.com/MiSTer-LLAPI/Minimig-AGA_MiSTer/releases/download/amiga-llapi-snac-20261029-accepted"
+    local ASSET="Amiga_LLAPI-2P_20261029_experimental.rbf"
     TMP_AMIGA="$(mktemp -d)"
-    cat > "${TMP_AMIGA}/expected.sha256" <<'SUMS'
-4a98b08637a0b38552b08359df7a31ad2d61e8ad4e9e09c5b2160148303debdb  Amiga_LLAPI-2P_20261029_experimental.rbf
-572b6bc07465c48f7eaec674b58ca070821f7c514ffb8e29169cf7dc92964ceb  Amiga_SNAC-DB15-2P_20261029_experimental.rbf
-4f101a185007defd9f1bbc844b82e2d0df6178eed7e8cc9bdfe59df388552ed2  Amiga_SNAC-SNES-2P_20261029_experimental.rbf
-dace04e46e532214099338dbfe02af0482ae9a45842d5daf10f5a525771a5727  Amiga_SNAC-SATURN-1P_20261029_experimental.rbf
-779dabfec574add1ca68ca288397ca5d368f94b78f27a322c53d4b2d032444d3  AVAILABLE-BUILDS.md
-da49c91a7e41f7eecc4289ec10504199df789d11fff154b75fc4adb32c2188b8  timing-acceptance.json
-SUMS
-    while read -r digest ASSET; do
-        curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_AMIGA}/${ASSET}"
-    done < "${TMP_AMIGA}/expected.sha256"
-    (cd "${TMP_AMIGA}" && sha256sum -c expected.sha256)
-    python3 - "${TMP_AMIGA}" <<'PYCODE'
-import json,math,sys
-from pathlib import Path
-p=Path(sys.argv[1]); data=json.loads((p/'timing-acceptance.json').read_text())
-required={'setup','hold','recovery','removal','minimum pulse width'}
-for mode in ['LLAPI-2P','SNAC-DB15-2P','SNAC-SNES-2P','SNAC-SATURN-1P']:
-    d=data[mode]
-    assert d['accepted'] and required.issubset(d['worst_slack_ns'])
-    assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
-PYCODE
-    for ASSET in "${TMP_AMIGA}"/Amiga_*.rbf; do
-        copy_file "${ASSET}" "${TARGET_DIR}/_LLAPI/_Amiga_Experimental/${ASSET##*/}"
-    done
-    copy_file "${TMP_AMIGA}/AVAILABLE-BUILDS.md" "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental/AVAILABLE-BUILDS.md"
-    copy_file "${TMP_AMIGA}/timing-acceptance.json" "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental/timing-acceptance.json"
+    curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_AMIGA}/${ASSET}"
+    printf '%s\n' '4a98b08637a0b38552b08359df7a31ad2d61e8ad4e9e09c5b2160148303debdb  Amiga_LLAPI-2P_20261029_experimental.rbf' | (cd "${TMP_AMIGA}" && sha256sum -c -)
+    copy_file "${TMP_AMIGA}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Amiga_Experimental/${ASSET}"
+    mkdir -p "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental"
+    cat > "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
+# Amiga LLAPI 2P — experimental
+Only Amiga_LLAPI-2P_20261029_experimental.rbf is distributed here. The SNAC variants have been withdrawn at the maintainer's request.
+Uses the official MiSTer Main. Compilation and timing passed; hardware testing is pending. USER is dedicated to LLAPI, so physical floppy / MT32-pi are disabled in this RBF. Virtual ADF/HDF remain available. For USER MIDI/floppy peripherals use the official Amiga core.
+Source: https://github.com/MiSTer-LLAPI/Minimig-AGA_MiSTer/tree/f48ad51a2305130e01aff89804ac248eeb43eeae
+Original authors and licenses are preserved. No Kickstart or game data is included.
+DOC
     rm -rf "${TMP_AMIGA}"
 }
 
@@ -185,4 +170,5 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1943_llapi_snac_pilot "${1}"
     install_amiga_experimental "${1}"
 fi
+
 
