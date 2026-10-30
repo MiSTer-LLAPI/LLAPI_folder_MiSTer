@@ -92,21 +92,20 @@ install_arcade_core() {
 
 # Current experimental controller test; replaces earlier updater pilots.
 install_1943_llapi_snac_pilot() {
-    local TARGET_DIR="${1}"
-    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1943-llapi-snac-20261029-2p"
-    local TMP_PILOT
+    local TARGET_DIR="${1}" TMP_PILOT
+    local TAG="v1943-llapi-snac-20261030-freebuttons-experimental"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${TAG}"
     TMP_PILOT="$(mktemp -d)"
-    # Prefer the OSD-pause correction only after it is publicly released.
-    # Until then, retain the previously validated controller build.
-    local PAUSE_TAG="v1943-llapi-snac-20261029-osd-pause"
-    local PAUSE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${PAUSE_TAG}"
-    if curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${PAUSE_TAG}" -o "${TMP_PILOT}/release.json" 2>/dev/null; then
-        python3 - "${TMP_PILOT}" <<'PYCODE'
+    if ! curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${TAG}" -o "${TMP_PILOT}/release.json"; then
+        rm -rf "${TMP_PILOT}"
+        return 1
+    fi
+    python3 - "${TMP_PILOT}" <<'PYCODE'
 import json,re,sys
 from pathlib import Path
 p=Path(sys.argv[1]); d=json.loads((p/'release.json').read_text())
-assert d['tag_name']=='v1943-llapi-snac-20261029-osd-pause' and not d['draft']
-names=['jt1943_llapi_snac_20261029_pause.rbf','1943-LLAPI-SNAC-Test.mra','timing-acceptance.json']
+assert d['tag_name']=='v1943-llapi-snac-20261030-freebuttons-experimental' and not d['draft']
+names=['jt1943_llapi_snac_20261030_freebuttons.rbf','1943-LLAPI-SNAC-Test.mra','timing-acceptance.json']
 lines=[]
 for name in names:
     a=[a for a in d['assets'] if a['name']==name]
@@ -114,33 +113,25 @@ for name in names:
     lines.append(a[0]['digest'][7:]+'  '+name)
 (p/'accepted-assets.sha256').write_text('\n'.join(lines)+'\n')
 PYCODE
-        curl -fsSL "${PAUSE_URL}/jt1943_llapi_snac_20261029_pause.rbf" -o "${TMP_PILOT}/jt1943_llapi_snac_20261029_pause.rbf"
-        curl -fsSL "${PAUSE_URL}/1943-LLAPI-SNAC-Test.mra" -o "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra"
-        curl -fsSL "${PAUSE_URL}/timing-acceptance.json" -o "${TMP_PILOT}/timing-acceptance.json"
-        (cd "${TMP_PILOT}" && sha256sum -c accepted-assets.sha256)
-        python3 - "${TMP_PILOT}" <<'PYCODE'
-import json,sys,xml.etree.ElementTree as ET
+    local ASSET
+    for ASSET in jt1943_llapi_snac_20261030_freebuttons.rbf 1943-LLAPI-SNAC-Test.mra timing-acceptance.json; do
+        curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PILOT}/${ASSET}"
+    done
+    (cd "${TMP_PILOT}" && sha256sum -c accepted-assets.sha256)
+    python3 - "${TMP_PILOT}" <<'PYCODE'
+import json,math,sys,xml.etree.ElementTree as ET
 from pathlib import Path
-p=Path(sys.argv[1]);d=json.loads((p/'timing-acceptance.json').read_text())
+p=Path(sys.argv[1]); d=json.loads((p/'timing-acceptance.json').read_text())
 required={'setup','hold','recovery','removal','minimum pulse width'}
 assert d['accepted'] and required.issubset(d['worst_slack_ns'])
-assert all(v>=0 for v in d['worst_slack_ns'].values())
-assert ET.parse(p/'1943-LLAPI-SNAC-Test.mra').findtext('rbf')=='jt1943_llapi_snac_20261029_pause'
+assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
+m=ET.parse(p/'1943-LLAPI-SNAC-Test.mra')
+assert m.findtext('rbf')=='jt1943_llapi_snac_20261030_freebuttons'
+assert m.findtext('setname')=='1943'
 PYCODE
-        copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261029_pause.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261029_pause.rbf"
-        copy_file "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-Test.mra"
-        rm -f "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261029.rbf"
-        rm -rf "${TMP_PILOT}"
-        return
-    fi
-    curl -fsSL "${RELEASE_URL}/jt1943_llapi_snac_20261029_test.rbf" -o "${TMP_PILOT}/jt1943_llapi_snac_20261029.rbf"
-    curl -fsSL "${RELEASE_URL}/1943-LLAPI-SNAC-Test.mra" -o "${TMP_PILOT}/1943-LLAPI-Test.mra"
-    printf '%s\n' \
-        '6571e3d34449677502035f9b82af2bac0dc04c19268f32215c687264038a6e17  jt1943_llapi_snac_20261029.rbf' \
-        'f67f5879f6d62aebf32492d5261dd7965691795dd11f652a5e8a947ade80da57  1943-LLAPI-Test.mra' \
-        | (cd "${TMP_PILOT}" && sha256sum -c -)
-    copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261029.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261029.rbf"
-    copy_file "${TMP_PILOT}/1943-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-Test.mra"
+    rm -f "${TARGET_DIR}/_LLAPI/cores/"jt1943_llapi_snac*.rbf
+    copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261030_freebuttons.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261030_freebuttons.rbf"
+    copy_file "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-Test.mra"
     rm -rf "${TMP_PILOT}"
 }
 
@@ -168,7 +159,7 @@ DOC
 # Install only the named, timing-accepted 1944 experimental release.
 install_1944_llapi_snac_pilot() {
     local TARGET_DIR="${1}" TMP_PILOT
-    local TAG="v1944-llapi-snac-20261029-autofire-experimental"
+    local TAG="v1944-llapi-snac-20261030-freebuttons-experimental"
     local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${TAG}"
     TMP_PILOT="$(mktemp -d)"
     if ! curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${TAG}" -o "${TMP_PILOT}/release.json"; then
@@ -179,8 +170,8 @@ install_1944_llapi_snac_pilot() {
 import json,re,sys
 from pathlib import Path
 p=Path(sys.argv[1]); d=json.loads((p/'release.json').read_text())
-assert d['tag_name']=='v1944-llapi-snac-20261029-autofire-experimental' and not d['draft']
-names=['jt1944_llapi_snac_20261029_autofire.rbf','1944-LLAPI-Test.mra','timing-acceptance.json']
+assert d['tag_name']=='v1944-llapi-snac-20261030-freebuttons-experimental' and not d['draft']
+names=['jt1944_llapi_snac_20261030_freebuttons.rbf','1944-LLAPI-Test.mra','timing-acceptance.json']
 lines=[]
 for name in names:
     a=[a for a in d['assets'] if a['name']==name]
@@ -189,7 +180,7 @@ for name in names:
 (p/'accepted-assets.sha256').write_text('\n'.join(lines)+'\n')
 PYCODE
     local ASSET
-    for ASSET in jt1944_llapi_snac_20261029_autofire.rbf 1944-LLAPI-Test.mra timing-acceptance.json; do
+    for ASSET in jt1944_llapi_snac_20261030_freebuttons.rbf 1944-LLAPI-Test.mra timing-acceptance.json; do
         curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PILOT}/${ASSET}"
     done
     (cd "${TMP_PILOT}" && sha256sum -c accepted-assets.sha256)
@@ -204,7 +195,8 @@ m=ET.parse(p/'1944-LLAPI-Test.mra')
 assert m.findtext('rbf')=='jt1944_llapi_snac'
 assert m.findtext('setname')=='1944'
 PYCODE
-    copy_file "${TMP_PILOT}/jt1944_llapi_snac_20261029_autofire.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1944_llapi_snac_20261029_autofire.rbf"
+    rm -f "${TARGET_DIR}/_LLAPI/cores/"jt1944_llapi_snac*.rbf
+    copy_file "${TMP_PILOT}/jt1944_llapi_snac_20261030_freebuttons.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1944_llapi_snac_20261030_freebuttons.rbf"
     copy_file "${TMP_PILOT}/1944-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1944-LLAPI-Test.mra"
     rm -rf "${TMP_PILOT}"
 }
@@ -215,6 +207,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_amiga_experimental "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
 
