@@ -153,11 +153,12 @@ install_amiga_experimental() {
     TMP_AMIGA="$(mktemp -d)"
     curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_AMIGA}/${ASSET}"
     printf '%s\n' '4a98b08637a0b38552b08359df7a31ad2d61e8ad4e9e09c5b2160148303debdb  Amiga_LLAPI-2P_20261029_experimental.rbf' | (cd "${TMP_AMIGA}" && sha256sum -c -)
-    copy_file "${TMP_AMIGA}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${ASSET}"
+    local MENU_NAME="Amiga_LLAPI-2P_20261029.rbf"
+    copy_file "${TMP_AMIGA}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${MENU_NAME}"
     mkdir -p "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental"
     cat > "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
 # Amiga LLAPI 2P — experimental
-Only Amiga_LLAPI-2P_20261029_experimental.rbf is distributed here. The SNAC variants have been withdrawn at the maintainer's request.
+The MiSTer menu filename is Amiga_LLAPI-2P_20261029.rbf. The published release asset keeps its original experimental suffix. The SNAC variants have been withdrawn at the maintainer's request.
 Uses the official MiSTer Main. Compilation and timing passed; hardware testing is pending. USER is dedicated to LLAPI, so physical floppy / MT32-pi are disabled in this RBF. Virtual ADF/HDF remain available. For USER MIDI/floppy peripherals use the official Amiga core.
 Source: https://github.com/MiSTer-LLAPI/Minimig-AGA_MiSTer/tree/f48ad51a2305130e01aff89804ac248eeb43eeae
 Original authors and licenses are preserved. No Kickstart or game data is included.
@@ -235,12 +236,12 @@ required={'setup','hold','recovery','removal','minimum pulse width'}
 assert d['accepted'] and required.issubset(d['worst_slack_ns'])
 assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
 PYCODE
-    local MENU_NAME="PSX_LLAPI_DS_Experimental_20261031.rbf"
+    local MENU_NAME="PSX_LLAPI_DS_20261031.rbf"
     copy_file "${TMP_PSX}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${MENU_NAME}"
     mkdir -p "${TARGET_DIR}/docs/PSX-LLAPI-Experimental"
     cat > "${TARGET_DIR}/docs/PSX-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
 # PSX LLAPI rumble — experimental
-This build requires Dual SDRAM hardware and uses normal CPU speed. Do not use it on Single SDRAM hardware. The MiSTer menu filename is PSX_LLAPI_DS_Experimental; DS means Dual SDRAM, matching the Saturn naming convention.
+This build requires Dual SDRAM hardware and uses normal CPU speed. Do not use it on Single SDRAM hardware. The MiSTer menu filename is PSX_LLAPI_DS; DS means Dual SDRAM, matching the Saturn naming convention.
 Rumble is OFF by default (OSD LLAPI rumble test). Combined finite jolts only; independent motor intensity is not supported. OSD disconnects LLAPI; effect expiry depends on adapter firmware. Physical testing remains pending.
 Quartus compilation and five timing categories passed. Setup margin is only +0.007 ns.
 Compiled source: c16632f952811a60b66c6cbf1b54a23bd14bd112 plus ONLY the attached QSF SEED 2 to 3 patch. No RTL/clocks/SDC/features changed.
@@ -257,6 +258,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_psx_experimental "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
 
