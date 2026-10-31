@@ -144,7 +144,7 @@ install_amiga_experimental() {
     TMP_AMIGA="$(mktemp -d)"
     curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_AMIGA}/${ASSET}"
     printf '%s\n' '4a98b08637a0b38552b08359df7a31ad2d61e8ad4e9e09c5b2160148303debdb  Amiga_LLAPI-2P_20261029_experimental.rbf' | (cd "${TMP_AMIGA}" && sha256sum -c -)
-    copy_file "${TMP_AMIGA}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Amiga_Experimental/${ASSET}"
+    copy_file "${TMP_AMIGA}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${ASSET}"
     mkdir -p "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental"
     cat > "${TARGET_DIR}/docs/Amiga-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
 # Amiga LLAPI 2P — experimental
@@ -201,12 +201,44 @@ PYCODE
     rm -rf "${TMP_PILOT}"
 }
 
+# Experimental PSX: only explicitly accepted hardware variants are listed here.
+install_psx_experimental() {
+    local TARGET_DIR="${1}" TMP_PSX
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/PSX_MiSTer/releases/download/v2026.10.31-llapi-rumble-normal-dual-experimental"
+    local ASSET="PSX_LLAPI_normal_dual_20261031_seed3_experimental.rbf"
+    TMP_PSX="$(mktemp -d)"
+    curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PSX}/${ASSET}"
+    curl -fsSL "${RELEASE_URL}/TIMING.json" -o "${TMP_PSX}/TIMING.json"
+    printf '%s\n' 'b434654eb4f9b76ee1f60de0b6a2bc477475c425b310809e2c5ed71129b6b79d  PSX_LLAPI_normal_dual_20261031_seed3_experimental.rbf' | (cd "${TMP_PSX}" && sha256sum -c -)
+    python3 - "${TMP_PSX}/TIMING.json" <<'PYCODE'
+import json,math,sys
+d=json.load(open(sys.argv[1]))
+required={'setup','hold','recovery','removal','minimum pulse width'}
+assert d['accepted'] and required.issubset(d['worst_slack_ns'])
+assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
+PYCODE
+    copy_file "${TMP_PSX}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${ASSET}"
+    mkdir -p "${TARGET_DIR}/docs/PSX-LLAPI-Experimental"
+    cat > "${TARGET_DIR}/docs/PSX-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
+# PSX LLAPI rumble — experimental
+This build requires Dual SDRAM hardware and uses normal CPU speed. Do not use it on Single SDRAM hardware. The filename explicitly identifies both properties.
+Rumble is OFF by default (OSD LLAPI rumble test). Combined finite jolts only; independent motor intensity is not supported. OSD disconnects LLAPI; effect expiry depends on adapter firmware. Physical testing remains pending.
+Quartus compilation and five timing categories passed. Setup margin is only +0.007 ns.
+Compiled source: c16632f952811a60b66c6cbf1b54a23bd14bd112 plus ONLY the attached QSF SEED 2 to 3 patch. No RTL/clocks/SDC/features changed.
+Release, source, patch, license, checksums and reports: https://github.com/MiSTer-LLAPI/PSX_MiSTer/releases/tag/v2026.10.31-llapi-rumble-normal-dual-experimental
+Other normal/2xCPU and Single/Dual variants will be included only after compilation and all timing checks pass. No BIOS or game data is included.
+DOC
+    rm -rf "${TMP_PSX}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
     install_1943_llapi_snac_pilot "${1}"
     install_amiga_experimental "${1}"
+    install_psx_experimental "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
 
