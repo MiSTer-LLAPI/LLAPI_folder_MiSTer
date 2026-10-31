@@ -235,11 +235,12 @@ required={'setup','hold','recovery','removal','minimum pulse width'}
 assert d['accepted'] and required.issubset(d['worst_slack_ns'])
 assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
 PYCODE
-    copy_file "${TMP_PSX}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${ASSET}"
+    local MENU_NAME="PSX_DUAL-SDRAM-ONLY_LLAPI_NormalCPU_Experimental_20261031.rbf"
+    copy_file "${TMP_PSX}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${MENU_NAME}"
     mkdir -p "${TARGET_DIR}/docs/PSX-LLAPI-Experimental"
     cat > "${TARGET_DIR}/docs/PSX-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
 # PSX LLAPI rumble — experimental
-This build requires Dual SDRAM hardware and uses normal CPU speed. Do not use it on Single SDRAM hardware. The filename explicitly identifies both properties.
+This build requires Dual SDRAM hardware and uses normal CPU speed. Do not use it on Single SDRAM hardware. The MiSTer menu filename starts with PSX_DUAL-SDRAM-ONLY and also identifies NormalCPU and Experimental.
 Rumble is OFF by default (OSD LLAPI rumble test). Combined finite jolts only; independent motor intensity is not supported. OSD disconnects LLAPI; effect expiry depends on adapter firmware. Physical testing remains pending.
 Quartus compilation and five timing categories passed. Setup margin is only +0.007 ns.
 Compiled source: c16632f952811a60b66c6cbf1b54a23bd14bd112 plus ONLY the attached QSF SEED 2 to 3 patch. No RTL/clocks/SDC/features changed.
@@ -256,6 +257,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_psx_experimental "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
 
