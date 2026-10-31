@@ -90,7 +90,7 @@ install_arcade_core() {
 }
 
 
-# Current experimental controller test; replaces earlier updater pilots.
+# Final 1943 controller release, promoted by maintainer on 31 October 2026.
 install_1943_llapi_snac_pilot() {
     local TARGET_DIR="${1}" TMP_PILOT
     local TAG="v1943-llapi-snac-20261030-freebuttons-experimental"
@@ -131,7 +131,16 @@ assert m.findtext('setname')=='1943'
 PYCODE
     rm -f "${TARGET_DIR}/_LLAPI/cores/"jt1943_llapi_snac*.rbf
     copy_file "${TMP_PILOT}/jt1943_llapi_snac_20261030_freebuttons.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1943_llapi_snac_20261030_freebuttons.rbf"
-    copy_file "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI-Test.mra"
+    # Final launcher label only; verified ROM definitions, RBF reference and notices are retained.
+    python3 - "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" <<'PYCODE'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1]); d=p.read_bytes()
+old="LLAPI + SNAC TEST".encode(); new=b'LLAPI + SNAC'
+assert d.count(old)==1
+p.write_bytes(d.replace(old,new,1))
+PYCODE
+    copy_file "${TMP_PILOT}/1943-LLAPI-SNAC-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1943-LLAPI.mra"
     rm -rf "${TMP_PILOT}"
 }
 
@@ -156,7 +165,7 @@ DOC
     rm -rf "${TMP_AMIGA}"
 }
 
-# Install only the named, timing-accepted 1944 experimental release.
+# Final 1944 controller release, promoted by maintainer on 31 October 2026.
 install_1944_llapi_snac_pilot() {
     local TARGET_DIR="${1}" TMP_PILOT
     local TAG="v1944-llapi-snac-20261030-freebuttons-experimental"
@@ -197,7 +206,16 @@ assert m.findtext('setname')=='1944'
 PYCODE
     rm -f "${TARGET_DIR}/_LLAPI/cores/"jt1944_llapi_snac*.rbf
     copy_file "${TMP_PILOT}/jt1944_llapi_snac_20261030_freebuttons.rbf" "${TARGET_DIR}/_LLAPI/cores/jt1944_llapi_snac_20261030_freebuttons.rbf"
-    copy_file "${TMP_PILOT}/1944-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1944-LLAPI-Test.mra"
+    # Final launcher label only; verified ROM definitions, RBF reference and notices are retained.
+    python3 - "${TMP_PILOT}/1944-LLAPI-Test.mra" <<'PYCODE'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1]); d=p.read_bytes()
+old="LLAPI Test".encode(); new=b'LLAPI + SNAC'
+assert d.count(old)==1
+p.write_bytes(d.replace(old,new,1))
+PYCODE
+    copy_file "${TMP_PILOT}/1944-LLAPI-Test.mra" "${TARGET_DIR}/_LLAPI/_Arcade/1944-LLAPI.mra"
     rm -rf "${TMP_PILOT}"
 }
 
