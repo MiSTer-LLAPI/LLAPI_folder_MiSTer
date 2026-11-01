@@ -246,9 +246,37 @@ Rumble is OFF by default (OSD LLAPI rumble test). Combined finite jolts only; in
 Quartus compilation and five timing categories passed. Setup margin is only +0.007 ns.
 Compiled source: c16632f952811a60b66c6cbf1b54a23bd14bd112 plus ONLY the attached QSF SEED 2 to 3 patch. No RTL/clocks/SDC/features changed.
 Release, source, patch, license, checksums and reports: https://github.com/MiSTer-LLAPI/PSX_MiSTer/releases/tag/v2026.10.31-llapi-rumble-normal-dual-experimental
-Other normal/2xCPU and Single/Dual variants will be included only after compilation and all timing checks pass. No BIOS or game data is included.
+Except for the explicitly documented Single RAM Diagnostic below, other variants require compilation and all timing checks to pass. No BIOS or game data is included.
 DOC
     rm -rf "${TMP_PSX}"
+}
+
+# Explicit maintainer exception: this exact Single RAM artifact is diagnostic only.
+install_psx_single_diagnostic() {
+    local TARGET_DIR="${1}" TMP_SINGLE
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/PSX_MiSTer/releases/download/v2026.10.31-llapi-rumble-single-diagnostic"
+    local ASSET="PSX_LLAPI_SingleRAM_Diagnostic_20261031.rbf"
+    TMP_SINGLE="$(mktemp -d)"
+    curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_SINGLE}/${ASSET}"
+    curl -fsSL "${RELEASE_URL}/TIMING.json" -o "${TMP_SINGLE}/TIMING.json"
+    printf '%s\n' '1a5c267777018b33cc2134f710fc028ee2b670794c63c88b06fbe06141ee6e85  PSX_LLAPI_SingleRAM_Diagnostic_20261031.rbf' | (cd "${TMP_SINGLE}" && sha256sum -c -)
+    python3 - "${TMP_SINGLE}/TIMING.json" <<'PYCODE'
+import json,sys
+d=json.load(open(sys.argv[1]))
+assert d['accepted'] is False
+assert d['worst_slack_ns']=={'setup':-0.523,'hold':-0.064,'recovery':3.783,'removal':1.081,'minimum pulse width':1.122}
+PYCODE
+    copy_file "${TMP_SINGLE}/${ASSET}" "${TARGET_DIR}/_LLAPI/_Experimental/${ASSET}"
+    mkdir -p "${TARGET_DIR}/docs/PSX-LLAPI-Experimental"
+    cp "${TMP_SINGLE}/TIMING.json" "${TARGET_DIR}/docs/PSX-LLAPI-Experimental/SingleRAM-Diagnostic-TIMING.json"
+    cat >> "${TARGET_DIR}/docs/PSX-LLAPI-Experimental/AVAILABLE-BUILDS.md" <<'DOC'
+
+## Single RAM Diagnostic — explicit timing exception
+PSX_LLAPI_SingleRAM_Diagnostic_20261031.rbf uses normal CPU speed and Single SDRAM hardware. Compilation and fitting completed, but timing FAILED: setup -0.523 ns and hold -0.064 ns. TIMING.json remains accepted=false. This exact artifact is included by explicit maintainer authorization for diagnosis only; it is not stable or timing-approved. Use disposable memory cards/saves and keep backups. Hardware validation is pending. Rumble defaults OFF; finite combined jolts only, no independent motor control.
+Source is c16632f952811a60b66c6cbf1b54a23bd14bd112 plus ONLY QSF SEED 2->3 and packing LOW->HIGH. Exact compiled source, patch, license, reports and checksums: https://github.com/MiSTer-LLAPI/PSX_MiSTer/releases/tag/v2026.10.31-llapi-rumble-single-diagnostic
+This is existing LLAPI rumble integration, not the new Enhanced driver. Stable PSX and the accepted Dual SDRAM build are preserved. No 2x CPU artifact is included.
+DOC
+    rm -rf "${TMP_SINGLE}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
@@ -256,8 +284,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1943_llapi_snac_pilot "${1}"
     install_amiga_experimental "${1}"
     install_psx_experimental "${1}"
+    install_psx_single_diagnostic "${1}"
     install_1944_llapi_snac_pilot "${1}"
 fi
+
 
 
 
