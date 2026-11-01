@@ -279,6 +279,40 @@ DOC
     rm -rf "${TMP_SINGLE}"
 }
 
+# Experimental Enhanced package; existing LLAPI finals remain separate.
+install_1944_enhanced() {
+    local TARGET_DIR="${1}" TMP_ENHANCED ASSET
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v0.2.0-1944-enhanced"
+    TMP_ENHANCED="$(mktemp -d)"
+    for ASSET in jt1944_llapi_enhanced_v0_2_0_20261101.rbf 1944-LLAPI-Enhanced.mra TIMING.json README.md LICENSE; do
+        curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_ENHANCED}/${ASSET}"
+    done
+    cat > "${TMP_ENHANCED}/expected.sha256" <<'HASHES'
+95dae115940f2c1e223049d915499aac59d875138ffe662fc743e05a0dbb1dce  jt1944_llapi_enhanced_v0_2_0_20261101.rbf
+d0fc595b70461578e4a935a09172d8b0de9e1ff3e0e4793f9fca33db6ce3302c  1944-LLAPI-Enhanced.mra
+65bf21b9e2d74b848019efaa29a7ed286ef1e948fd38fdc6a767ae76965c6409  TIMING.json
+ed75b021bafcedf8d9f12b165b1ed05a0327fd66d5b62012cb5842aac5117310  README.md
+589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+HASHES
+    (cd "${TMP_ENHANCED}" && sha256sum -c expected.sha256)
+    python3 - "${TMP_ENHANCED}" <<'PYCODE'
+import json,math,sys,xml.etree.ElementTree as ET
+from pathlib import Path
+p=Path(sys.argv[1]);d=json.loads((p/'TIMING.json').read_text())
+required={'setup','hold','recovery','removal','minimum pulse width'}
+assert d['accepted'] and required.issubset(d['worst_slack_ns'])
+assert all(math.isfinite(v) and v>=0 for v in d['worst_slack_ns'].values())
+m=ET.parse(p/'1944-LLAPI-Enhanced.mra')
+assert m.findtext('rbf')=='jt1944_llapi_enhanced_v0_2_0' and m.findtext('setname')=='1944'
+PYCODE
+    copy_file "${TMP_ENHANCED}/jt1944_llapi_enhanced_v0_2_0_20261101.rbf" "${TARGET_DIR}/_LLAPI Enhanced/cores/jt1944_llapi_enhanced_v0_2_0_20261101.rbf"
+    copy_file "${TMP_ENHANCED}/1944-LLAPI-Enhanced.mra" "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/1944-LLAPI-Enhanced.mra"
+    for ASSET in README.md TIMING.json LICENSE; do
+        copy_file "${TMP_ENHANCED}/${ASSET}" "${TARGET_DIR}/docs/1944-LLAPI-Enhanced/${ASSET}"
+    done
+    rm -rf "${TMP_ENHANCED}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
     install_1943_llapi_snac_pilot "${1}"
@@ -286,7 +320,9 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_psx_experimental "${1}"
     install_psx_single_diagnostic "${1}"
     install_1944_llapi_snac_pilot "${1}"
+    install_1944_enhanced "${1}"
 fi
+
 
 
 
