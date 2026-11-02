@@ -306,7 +306,17 @@ m=ET.parse(p/'1944-LLAPI-Enhanced.mra')
 assert m.findtext('rbf')=='jt1944_llapi_enhanced_v0_2_0' and m.findtext('setname')=='1944'
 PYCODE
     copy_file "${TMP_ENHANCED}/jt1944_llapi_enhanced_v0_2_0_20261101.rbf" "${TARGET_DIR}/_LLAPI Enhanced/cores/jt1944_llapi_enhanced_v0_2_0_20261101.rbf"
-    copy_file "${TMP_ENHANCED}/1944-LLAPI-Enhanced.mra" "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/1944-LLAPI-Enhanced.mra"
+    # Rename the launcher only; retain the verified RBF and its reference.
+    python3 - "${TMP_ENHANCED}/1944-LLAPI-Enhanced.mra" <<'PYCODE'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1]); data=p.read_text()
+old='<name>1944: The Loop Master (Europe 000620) — LLAPI Enhanced v0.2.0</name>'
+assert data.count(old)==1
+p.write_text(data.replace(old,'<name>1944-LLAPI-SNAC</name>',1))
+PYCODE
+    rm -f "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/1944-LLAPI-Enhanced.mra"
+    copy_file "${TMP_ENHANCED}/1944-LLAPI-Enhanced.mra" "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/1944-LLAPI-SNAC.mra"
     for ASSET in README.md TIMING.json LICENSE; do
         copy_file "${TMP_ENHANCED}/${ASSET}" "${TARGET_DIR}/docs/1944-LLAPI-Enhanced/${ASSET}"
     done
