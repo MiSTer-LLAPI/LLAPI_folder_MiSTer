@@ -328,7 +328,7 @@ install_1943_enhanced() {
     local TARGET_DIR="${1}"
     local TMP_1943_ENHANCED
     TMP_1943_ENHANCED="$(mktemp -d)"
-    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v0.3.0-1943-enhanced"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v0.4.0-1943-enhanced"
     local ASSET
     for ASSET in 1943-LLAPI-SNAC.rbf 1943-LLAPI-SNAC.mra LLAPI-VERSION.json RELEASE-NOTES.md LICENSE; do
         curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_1943_ENHANCED}/${ASSET}"
@@ -337,7 +337,7 @@ install_1943_enhanced() {
 from pathlib import Path
 import sys,hashlib,xml.etree.ElementTree as ET
 p=Path(sys.argv[1])
-expected={'1943-LLAPI-SNAC.rbf':'df03408836da8400b4b9f77f3f5fbca76692ff77a918c2c705d1a6ef98e86c56','1943-LLAPI-SNAC.mra':'d8c6c2040c8538d8f74e102716ffe916fbf700340a0137b8da7b52eb9e688f69'}
+expected={'1943-LLAPI-SNAC.rbf':'13942b1d1a638b2bbcd86d4c5cf4513d3c8d85f26f3faa1f5131b98bd87213f3','1943-LLAPI-SNAC.mra':'d8c6c2040c8538d8f74e102716ffe916fbf700340a0137b8da7b52eb9e688f69'}
 for name,digest in expected.items():
     assert hashlib.sha256((p/name).read_bytes()).hexdigest()==digest,name
 m=ET.parse(p/'1943-LLAPI-SNAC.mra')
@@ -362,6 +362,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1944_enhanced "${1}"
     install_1943_enhanced "${1}"
 fi
+
 
 
 
