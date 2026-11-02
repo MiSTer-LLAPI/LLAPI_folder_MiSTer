@@ -323,6 +323,35 @@ PYCODE
     rm -rf "${TMP_ENHANCED}"
 }
 
+
+install_1943_enhanced() {
+    local TARGET_DIR="${1}"
+    local TMP_1943_ENHANCED
+    TMP_1943_ENHANCED="$(mktemp -d)"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v0.3.0-1943-enhanced"
+    local ASSET
+    for ASSET in 1943-LLAPI-SNAC.rbf 1943-LLAPI-SNAC.mra LLAPI-VERSION.json RELEASE-NOTES.md LICENSE; do
+        curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_1943_ENHANCED}/${ASSET}"
+    done
+    python3 - "${TMP_1943_ENHANCED}" <<'PYCODE'
+from pathlib import Path
+import sys,hashlib,xml.etree.ElementTree as ET
+p=Path(sys.argv[1])
+expected={'1943-LLAPI-SNAC.rbf':'df03408836da8400b4b9f77f3f5fbca76692ff77a918c2c705d1a6ef98e86c56','1943-LLAPI-SNAC.mra':'d8c6c2040c8538d8f74e102716ffe916fbf700340a0137b8da7b52eb9e688f69'}
+for name,digest in expected.items():
+    assert hashlib.sha256((p/name).read_bytes()).hexdigest()==digest,name
+m=ET.parse(p/'1943-LLAPI-SNAC.mra')
+assert m.findtext('rbf')=='1943-LLAPI-SNAC'
+assert m.findtext('name')=='1943-LLAPI-SNAC'
+PYCODE
+    copy_file "${TMP_1943_ENHANCED}/1943-LLAPI-SNAC.rbf" "${TARGET_DIR}/_LLAPI Enhanced/cores/1943-LLAPI-SNAC.rbf"
+    copy_file "${TMP_1943_ENHANCED}/1943-LLAPI-SNAC.mra" "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/1943-LLAPI-SNAC.mra"
+    for ASSET in LLAPI-VERSION.json RELEASE-NOTES.md LICENSE; do
+        copy_file "${TMP_1943_ENHANCED}/${ASSET}" "${TARGET_DIR}/docs/1943-LLAPI-SNAC/${ASSET}"
+    done
+    rm -rf "${TMP_1943_ENHANCED}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
     install_1943_llapi_snac_pilot "${1}"
@@ -331,7 +360,9 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_psx_single_diagnostic "${1}"
     install_1944_llapi_snac_pilot "${1}"
     install_1944_enhanced "${1}"
+    install_1943_enhanced "${1}"
 fi
+
 
 
 
