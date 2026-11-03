@@ -1,0 +1,12 @@
+{
+  "version": "v0.2.1-dev",
+  "release_commit": null,
+  "rtl_commit": "bf866b201f3f96c1a2a5048d903891d652586b47",
+  "base_release_commit": "75d3e73f6f3c5d7275c0e094eda9c8d7aa231e04",
+  "rtl_sha256": "63ac038f7ae17cb996391c2249f3fa1447268b68167c25b97e6356b29985d895",
+  "compiled_file": "modules/jtframe/target/mister/hdl/jtframe_llapi_protocol.sv",
+  "compiled_file_sha256": "4e9ec85f8a918a29769ba2a03de8b6a7b036c1920f40ebe32d6544c0d48fd6fe",
+  "wrapper": "Core wrapper exposes STATUS_UPDATE/LINK_FAULT to per-port counters. FAULT_REASON unused; base RTL prefix identical.",
+  "validation": "37 driver regression runs, cycle equivalence,12 integration fixtures, dual-wire loss/reconnect and HPS2048 PASS. Quartus and physical validation pending.",
+  "source_commit": "b7e5de0764a1dfcecd79eebf1a9cfba3b195ad3e"
+}
