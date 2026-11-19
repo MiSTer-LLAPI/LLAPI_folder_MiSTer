@@ -96,23 +96,11 @@ install_1943_llapi_snac_pilot() {
     local TAG="v1943-llapi-snac-20261030-freebuttons-experimental"
     local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${TAG}"
     TMP_PILOT="$(mktemp -d)"
-    if ! curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${TAG}" -o "${TMP_PILOT}/release.json"; then
-        rm -rf "${TMP_PILOT}"
-        return 1
-    fi
-    python3 - "${TMP_PILOT}" <<'PYCODE'
-import json,re,sys
-from pathlib import Path
-p=Path(sys.argv[1]); d=json.loads((p/'release.json').read_text())
-assert d['tag_name']=='v1943-llapi-snac-20261030-freebuttons-experimental' and not d['draft']
-names=['jt1943_llapi_snac_20261030_freebuttons.rbf','1943-LLAPI-SNAC-Test.mra','timing-acceptance.json']
-lines=[]
-for name in names:
-    a=[a for a in d['assets'] if a['name']==name]
-    assert len(a)==1 and re.fullmatch(r'sha256:[0-9a-f]{64}',a[0].get('digest') or '')
-    lines.append(a[0]['digest'][7:]+'  '+name)
-(p/'accepted-assets.sha256').write_text('\n'.join(lines)+'\n')
-PYCODE
+    cat > "${TMP_PILOT}/accepted-assets.sha256" <<'SUMS'
+f7786e16354f6fe90a632f8ad822807e4f956890ca99fbc0786a86c46cb37f18  jt1943_llapi_snac_20261030_freebuttons.rbf
+2fbd5ec30285cb10f0d2f406731fab379aff8d8b321c024fa5149310ab214f8c  1943-LLAPI-SNAC-Test.mra
+8cce28aa8b1116a6ef0dff2de48ba84bc0381f5034288d99cce564d34e22b26e  timing-acceptance.json
+SUMS
     local ASSET
     for ASSET in jt1943_llapi_snac_20261030_freebuttons.rbf 1943-LLAPI-SNAC-Test.mra timing-acceptance.json; do
         curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PILOT}/${ASSET}"
@@ -172,23 +160,11 @@ install_1944_llapi_snac_pilot() {
     local TAG="v1944-llapi-snac-20261030-freebuttons-experimental"
     local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/${TAG}"
     TMP_PILOT="$(mktemp -d)"
-    if ! curl -fsSL "https://api.github.com/repos/MiSTer-LLAPI/jtcores/releases/tags/${TAG}" -o "${TMP_PILOT}/release.json"; then
-        rm -rf "${TMP_PILOT}"
-        return 1
-    fi
-    python3 - "${TMP_PILOT}" <<'PYCODE'
-import json,re,sys
-from pathlib import Path
-p=Path(sys.argv[1]); d=json.loads((p/'release.json').read_text())
-assert d['tag_name']=='v1944-llapi-snac-20261030-freebuttons-experimental' and not d['draft']
-names=['jt1944_llapi_snac_20261030_freebuttons.rbf','1944-LLAPI-Test.mra','timing-acceptance.json']
-lines=[]
-for name in names:
-    a=[a for a in d['assets'] if a['name']==name]
-    assert len(a)==1 and re.fullmatch(r'sha256:[0-9a-f]{64}',a[0].get('digest') or '')
-    lines.append(a[0]['digest'][7:]+'  '+name)
-(p/'accepted-assets.sha256').write_text('\n'.join(lines)+'\n')
-PYCODE
+    cat > "${TMP_PILOT}/accepted-assets.sha256" <<'SUMS'
+729ce0307dd6a9f885c666ae7efa95b70f5133fe74f4ab7252551bc77a67db24  jt1944_llapi_snac_20261030_freebuttons.rbf
+bc5578a0f426508b57e7702fdc9e1c194c0cf68363f2a2d7d78172b27790387a  1944-LLAPI-Test.mra
+5feb489fe2fdf20eca856f12452466bc459e8e8c6c02c7452b4c4f734d9e476c  timing-acceptance.json
+SUMS
     local ASSET
     for ASSET in jt1944_llapi_snac_20261030_freebuttons.rbf 1944-LLAPI-Test.mra timing-acceptance.json; do
         curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_PILOT}/${ASSET}"
