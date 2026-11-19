@@ -429,6 +429,25 @@ with zipfile.ZipFile(io.BytesIO(archive)) as package:
     for name in ('README.txt', 'LICENSE', 'LLAPI-LICENSE.txt', 'build.json'):
         (docs / name).write_bytes(package.read(name))
 P1TIMING
+    python3 - "${1}/_LLAPI Enhanced/_Arcade" <<'TITLES'
+from pathlib import Path
+import re
+import sys
+
+arcade = Path(sys.argv[1])
+for original, title in {
+    "1943-LLAPI-SNAC": "1943",
+    "1944-LLAPI-SNAC": "1944",
+    "Contra-LLAPI-SNAC": "Contra",
+    "Contra-LLAPI-Diag": "Contra (P1 Timing)",
+}.items():
+    source = arcade / (original + ".mra")
+    data = source.read_bytes()
+    pattern = rb"<name>[^<]*</name>"
+    assert len(re.findall(pattern, data)) == 1, source
+    (arcade / (title + ".mra")).write_bytes(re.sub(pattern, ("<name>" + title + "</name>").encode(), data))
+    source.unlink()
+TITLES
 fi
 
 
