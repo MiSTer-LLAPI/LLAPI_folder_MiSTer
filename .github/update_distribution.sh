@@ -366,7 +366,9 @@ d9edcb17b537b00f00be8d24f17805e5ec2b3013f887b2dae357b765a41a13d4  core
 SUMS
     )
     copy_file "$tmp/core" "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
-    copy_file "$tmp/game" "$target/_LLAPI Enhanced/_Arcade/Golden Axe - LLAPI Enhanced 1.0.mra"
+    sed 's|<name>Golden Axe (set 6, US) (8751 317-123A)</name>|<name>Golden Axe</name>|' "$tmp/game" > "$tmp/Golden Axe.mra"
+    copy_file "$tmp/Golden Axe.mra" "$target/_LLAPI Enhanced/_Arcade/Golden Axe.mra"
+    rm -f "$target/_LLAPI Enhanced/_Arcade/Golden Axe - LLAPI Enhanced 1.0.mra"
 )
 
 install_contra_enhanced() {
