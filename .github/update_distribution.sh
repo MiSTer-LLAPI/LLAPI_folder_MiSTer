@@ -448,6 +448,18 @@ for original, title in {
     (arcade / (title + ".mra")).write_bytes(re.sub(pattern, ("<name>" + title + "</name>").encode(), data))
     source.unlink()
 TITLES
+    # Verified CI builds: 1944 44560972333, Final Fight 44583668429,
+    # The Punisher 44588490334, Darius (rmonic79) 44593996218.
+    # Source and workflow history: https://github.com/MiSTer-LLAPI/jtcores/actions
+    python3 - "${1}/_LLAPI Enhanced" <<'ENHANCED'
+from pathlib import Path
+import hashlib, sys, zipfile
+archive = Path('.github/Enhanced-Arcade-1.0.zip')
+if hashlib.sha256(archive.read_bytes()).hexdigest() != 'b55111cae0c1fe984947e7984113f8b18d46a8e8c31d69388295820431c172c4':
+    raise SystemExit('Enhanced archive checksum mismatch')
+with zipfile.ZipFile(archive) as package:
+    package.extractall(sys.argv[1])
+ENHANCED
 fi
 
 
