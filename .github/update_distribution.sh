@@ -390,6 +390,25 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1944_enhanced "${1}"
     install_1943_enhanced "${1}"
     install_contra_enhanced "${1}"
+    # Install the separate P1 timing build from its verified CI archive.
+    python3 - "${1}" <<'P1TIMING'
+import hashlib, io, sys, zipfile
+from pathlib import Path
+root = Path(sys.argv[1])
+archive = Path('.github/Contra-P1-Timing.zip').read_bytes()
+if hashlib.sha256(archive).hexdigest() != 'cb6c8ce7afec9bb12f55284997b9416ed22fa9c8f36cdc072d2aa531c5da1253':
+    raise SystemExit('Unexpected Contra P1 Timing archive')
+with zipfile.ZipFile(io.BytesIO(archive)) as package:
+    with zipfile.ZipFile(io.BytesIO(package.read('MiSTer-install.zip'))) as install:
+        for name in ('_LLAPI Enhanced/cores/Contra-LLAPI-Diag.rbf', '_LLAPI Enhanced/_Arcade/Contra-LLAPI-Diag.mra'):
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(install.read(name))
+    docs = root / 'docs/Contra-LLAPI-Diag'
+    docs.mkdir(parents=True, exist_ok=True)
+    for name in ('README.txt', 'LICENSE', 'LLAPI-LICENSE.txt', 'build.json'):
+        (docs / name).write_bytes(package.read(name))
+P1TIMING
 fi
 
 
