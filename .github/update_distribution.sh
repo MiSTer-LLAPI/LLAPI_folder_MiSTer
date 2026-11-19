@@ -352,6 +352,23 @@ PYCODE
     rm -rf "${TMP_1943_ENHANCED}"
 }
 
+install_goldenaxe_enhanced() (
+    set -e
+    local target="$1" tmp url
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    url="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1.0.0-goldenaxe-enhanced"
+    curl -fsSL "$url/jtgoldnaxe_llapi10.rbf" -o "$tmp/core"
+    curl -fsSL "$url/Golden.Axe.-.LLAPI.Enhanced.1.0.mra" -o "$tmp/game"
+    (cd "$tmp" && sha256sum -c <<'SUMS'
+d9edcb17b537b00f00be8d24f17805e5ec2b3013f887b2dae357b765a41a13d4  core
+79eb951f47e4d3af047906b3dcf505a04f447df5e4be75a251512e11f9faec5a  game
+SUMS
+    )
+    copy_file "$tmp/core" "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
+    copy_file "$tmp/game" "$target/_LLAPI Enhanced/_Arcade/Golden Axe - LLAPI Enhanced 1.0.mra"
+)
+
 install_contra_enhanced() {
     local TARGET_DIR="${1}"
     local TMP_CONTRA_ENHANCED
@@ -390,6 +407,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1944_enhanced "${1}"
     install_1943_enhanced "${1}"
     install_contra_enhanced "${1}"
+    install_goldenaxe_enhanced "${1}"
     # Install the separate P1 timing build from its verified CI archive.
     python3 - "${1}" <<'P1TIMING'
 import hashlib, io, sys, zipfile
