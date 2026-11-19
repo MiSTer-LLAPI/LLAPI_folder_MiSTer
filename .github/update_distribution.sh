@@ -352,6 +352,34 @@ PYCODE
     rm -rf "${TMP_1943_ENHANCED}"
 }
 
+install_contra_enhanced() {
+    local TARGET_DIR="${1}"
+    local TMP_CONTRA_ENHANCED
+    TMP_CONTRA_ENHANCED="$(mktemp -d)"
+    local RELEASE_URL="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v0.8.0-contra-enhanced"
+    local ASSET
+    for ASSET in Contra-LLAPI-SNAC.rbf Contra-LLAPI-SNAC.mra LLAPI-VERSION.json RELEASE-NOTES.md LICENSE; do
+        curl -fsSL "${RELEASE_URL}/${ASSET}" -o "${TMP_CONTRA_ENHANCED}/${ASSET}"
+    done
+    python3 - "${TMP_CONTRA_ENHANCED}" <<'PYCODE'
+from pathlib import Path
+import sys,hashlib,xml.etree.ElementTree as ET
+p=Path(sys.argv[1])
+expected={'Contra-LLAPI-SNAC.rbf':'0c260adf68641fbb2e11bafb8c236350848d24b4b47472bd7e6439d47208d130','Contra-LLAPI-SNAC.mra':'98c43101af8c3e8a4e7446d0bbd87edf27ce5b92cc223f2da3e3b41987f77864'}
+for name,digest in expected.items():
+    assert hashlib.sha256((p/name).read_bytes()).hexdigest()==digest,name
+m=ET.parse(p/'Contra-LLAPI-SNAC.mra')
+assert m.findtext('rbf')=='Contra-LLAPI-SNAC'
+assert m.findtext('name')=='Contra-LLAPI-SNAC'
+PYCODE
+    copy_file "${TMP_CONTRA_ENHANCED}/Contra-LLAPI-SNAC.rbf" "${TARGET_DIR}/_LLAPI Enhanced/cores/Contra-LLAPI-SNAC.rbf"
+    copy_file "${TMP_CONTRA_ENHANCED}/Contra-LLAPI-SNAC.mra" "${TARGET_DIR}/_LLAPI Enhanced/_Arcade/Contra-LLAPI-SNAC.mra"
+    for ASSET in LLAPI-VERSION.json RELEASE-NOTES.md LICENSE; do
+        copy_file "${TMP_CONTRA_ENHANCED}/${ASSET}" "${TARGET_DIR}/docs/Contra-LLAPI-SNAC/${ASSET}"
+    done
+    rm -rf "${TMP_CONTRA_ENHANCED}"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     update_distribution "${1}" ""
     install_1943_llapi_snac_pilot "${1}"
@@ -361,6 +389,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_1944_llapi_snac_pilot "${1}"
     install_1944_enhanced "${1}"
     install_1943_enhanced "${1}"
+    install_contra_enhanced "${1}"
 fi
 
 
