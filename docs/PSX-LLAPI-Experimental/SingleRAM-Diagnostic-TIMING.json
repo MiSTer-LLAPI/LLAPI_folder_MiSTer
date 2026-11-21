@@ -1,0 +1,11 @@
+{
+  "accepted": false,
+  "report": "output_files/PSX.sta.rpt",
+  "worst_slack_ns": {
+    "hold": -0.064,
+    "minimum pulse width": 1.122,
+    "setup": -0.523,
+    "removal": 1.081,
+    "recovery": 3.783
+  }
+}

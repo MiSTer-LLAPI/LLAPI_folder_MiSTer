@@ -1,0 +1,26 @@
+{
+  "diagnostic": "Contra LLAPI P1 polling timings",
+  "workflow_source": "https://github.com/MiSTer-LLAPI/jtcores/blob/a5d760a27c09aea53071788038d8a66512365be8/.github/workflows/contra-poll-diagnostic.yml",
+  "quartus": "20.1.1 Build 720 11/11/2020 SJ Lite Edition",
+  "fpga_image": "jotego/jtcore20@sha256:a0397645aeac483f90718c89e5fd491c4889db6e4202bcba7f7f7770e14beb6b",
+  "release_driver": "v0.3.0-dev",
+  "instrumented_driver_wrapper_sha256": "2cfceb1cfa2a37ca6f40c3d06832a3766401d5eb74c8ecb7b49cea81818252a8",
+  "worst_slack_ns": {
+    "setup": 0.514,
+    "hold": 0.252,
+    "recovery": 3.459,
+    "removal": 1.053,
+    "minimum pulse width": 0.694
+  },
+  "installed_files": {
+    "_LLAPI Enhanced/cores/Contra-LLAPI-Diag.rbf": {
+      "size": 3080756,
+      "sha256": "72b8c0c917f324f78f1942c3344ab0ac90f30a94de1d35de3961814b1298b3be"
+    },
+    "_LLAPI Enhanced/_Arcade/Contra-LLAPI-Diag.mra": {
+      "size": 3710,
+      "sha256": "002943b1a279909efc332a0c7423e6cd31e7dec04be9918160dbb6521685ab8c"
+    }
+  },
+  "physical_validation": "pending"
+}

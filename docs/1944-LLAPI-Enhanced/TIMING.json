@@ -1,0 +1,12 @@
+{
+  "report": "cores/1944/mister/output_files/jt1944.sta.rpt",
+  "worst_slack_ns": {
+    "setup": 0.368,
+    "hold": 0.243,
+    "recovery": 0.955,
+    "removal": 0.719,
+    "minimum pulse width": 1.041
+  },
+  "accepted": true
+}
+

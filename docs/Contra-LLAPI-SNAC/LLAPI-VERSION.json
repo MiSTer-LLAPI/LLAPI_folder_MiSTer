@@ -1,0 +1,12 @@
+{
+  "version": "v0.3.0-dev",
+  "release_commit": null,
+  "rtl_commit": null,
+  "base_release_commit": "75d3e73f6f3c5d7275c0e094eda9c8d7aa231e04",
+  "rtl_sha256": "01a64fc4adf2d31b975ef9219c731ab0fd84ec59cc79cefe1b980541349ebe26",
+  "compiled_file": "modules/jtframe/target/mister/hdl/jtframe_llapi_protocol.sv",
+  "compiled_file_sha256": "07efc7bff0968385821c5591cefda299f902940e375d213cdfac3f896d4d224b",
+  "wrapper": "Per-port type change and fault reason. Two-port loss and countdown.",
+  "validation": "42 standalone driver simulations passed. Contra dual-port HOLD swap passed in simulation.",
+  "source_commit": null
+}
