@@ -381,8 +381,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]] ; then
     install_amiga_experimental "${1}"
     install_psx_experimental "${1}"
     install_psx_single_diagnostic "${1}"
-    install_1944_llapi_snac_pilot "${1}"
-    install_1944_enhanced "${1}"
     install_1943_enhanced "${1}"
     install_contra_enhanced "${1}"
     install_goldenaxe_enhanced "${1}"
@@ -413,7 +411,6 @@ import sys
 arcade = Path(sys.argv[1])
 for original, title in {
     "1943-LLAPI-SNAC": "1943",
-    "1944-LLAPI-SNAC": "1944",
     "Contra-LLAPI-SNAC": "Contra",
     "Contra-LLAPI-Diag": "Contra (P1 Timing)",
 }.items():
