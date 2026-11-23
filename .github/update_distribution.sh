@@ -435,11 +435,11 @@ with zipfile.ZipFile(archive) as package:
     package.extractall(sys.argv[1])
 ENHANCED
     # Rename the assembled directory before generating the Update All index.
-    if [[ -e "${1}/_LLAPI + SNAC Enhanced" ]]; then
+    if [[ -e "${1}/_LLAPI+SNAC Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
         exit 1
     fi
-    mv -- "${1}/_LLAPI Enhanced" "${1}/_LLAPI + SNAC Enhanced" || exit 1
+    mv -- "${1}/_LLAPI Enhanced" "${1}/_LLAPI+SNAC Enhanced" || exit 1
 fi
 
 
