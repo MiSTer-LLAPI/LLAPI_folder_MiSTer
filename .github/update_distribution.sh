@@ -429,7 +429,7 @@ TITLES
 from pathlib import Path
 import hashlib, sys, zipfile
 archive = Path('.github/Enhanced-Arcade-1.0.zip')
-if hashlib.sha256(archive.read_bytes()).hexdigest() != '6e458e076e3fdc40737cbdfa69f6948190fa9af773781c31de4fa32d48d0d604':
+if hashlib.sha256(archive.read_bytes()).hexdigest() != 'e5b16273f4509ded1ff7361524c68c90c9f5ef7ad77ca0532f2ec21e3b76cde2':
     raise SystemExit('Enhanced archive checksum mismatch')
 with zipfile.ZipFile(archive) as package:
     package.extractall(sys.argv[1])
