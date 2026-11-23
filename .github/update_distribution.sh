@@ -434,6 +434,12 @@ if hashlib.sha256(archive.read_bytes()).hexdigest() != '2ab2660334300ba9a1a678ef
 with zipfile.ZipFile(archive) as package:
     package.extractall(sys.argv[1])
 ENHANCED
+    # Rename the assembled directory before generating the Update All index.
+    if [[ -e "${1}/_LLAPI + SNAC Enhanced" ]]; then
+        echo "Enhanced catalog destination already exists" >&2
+        exit 1
+    fi
+    mv -- "${1}/_LLAPI Enhanced" "${1}/_LLAPI + SNAC Enhanced" || exit 1
 fi
 
 

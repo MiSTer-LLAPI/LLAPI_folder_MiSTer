@@ -1,6 +1,6 @@
 # LLAPI Folder
 
-This repository contains all MiSTer-LLAPI cores under the _LLAPI folder.
+This repository distributes classic MiSTer-LLAPI cores in `_LLAPI` and Enhanced cores in `_LLAPI + SNAC Enhanced`.
 
 #### List of Tags that you may use with the Downloader and the 'Custom Download Filters' feature.
 
