@@ -437,14 +437,19 @@ ENHANCED
     python3 - "${1}/_LLAPI Enhanced" <<'JOTEGO_ENHANCED'
 from pathlib import Path
 import hashlib, sys, zipfile
-archive = Path('.github/Enhanced-Jotego-2.0.zip')
-if hashlib.sha256(archive.read_bytes()).hexdigest() != '998ccea4e0e87e0b7e32cd0e8216825e5ee0832521883af27b39d2956a36a4a7':
-    raise SystemExit('Jotego Enhanced archive checksum mismatch')
 target = Path(sys.argv[1])
-with zipfile.ZipFile(archive) as package:
-    if any((target / name).exists() for name in package.namelist()):
-        raise SystemExit('Jotego Enhanced archive would overwrite an existing file')
-    package.extractall(target)
+packages = {
+    'Enhanced-Jotego-2.0.zip': '724d1f17f5b328bf1cf767f120db6a4c4b1da3ac55084076d4cfeba5e2cd1fb5',
+    'Enhanced-Jotego-2.1.zip': '25f0388329decfbf8aa743aa069d77e8e6f5a976b642e615063445d1b26242e5',
+}
+for name, expected in packages.items():
+    archive = Path('.github') / name
+    if hashlib.sha256(archive.read_bytes()).hexdigest() != expected:
+        raise SystemExit(f'Checksum mismatch: {name}')
+    with zipfile.ZipFile(archive) as package:
+        if any((target / member).exists() for member in package.namelist()):
+            raise SystemExit(f'Duplicate Jotego Enhanced file in {name}')
+        package.extractall(target)
 JOTEGO_ENHANCED
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
