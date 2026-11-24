@@ -438,7 +438,7 @@ ENHANCED
 from pathlib import Path
 import hashlib, sys, zipfile
 archive = Path('.github/Enhanced-Jotego-2.0.zip')
-if hashlib.sha256(archive.read_bytes()).hexdigest() != '7f0bb6b12396206dc3cd1bf32f116c4ca57a3830c207a9c177c07bb164aab77a':
+if hashlib.sha256(archive.read_bytes()).hexdigest() != 'd57891a3b3f09a32838366ee5e0d3a30d7b49dd123c5b0737d3f37acdcb3e197':
     raise SystemExit('Jotego Enhanced archive checksum mismatch')
 target = Path(sys.argv[1])
 with zipfile.ZipFile(archive) as package:
