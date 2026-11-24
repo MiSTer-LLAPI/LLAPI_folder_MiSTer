@@ -429,7 +429,7 @@ TITLES
 from pathlib import Path
 import hashlib, sys, zipfile
 archive = Path('.github/Enhanced-Arcade-1.0.zip')
-if hashlib.sha256(archive.read_bytes()).hexdigest() != 'e5b16273f4509ded1ff7361524c68c90c9f5ef7ad77ca0532f2ec21e3b76cde2':
+if hashlib.sha256(archive.read_bytes()).hexdigest() != '3420d8555917600f4de105294cd823e9e909ac31d16c32cee9909370367a4e86':
     raise SystemExit('Enhanced archive checksum mismatch')
 with zipfile.ZipFile(archive) as package:
     package.extractall(sys.argv[1])
@@ -446,8 +446,6 @@ with zipfile.ZipFile(archive) as package:
         raise SystemExit('Jotego Enhanced archive would overwrite an existing file')
     package.extractall(target)
 JOTEGO_ENHANCED
-    printf '%s  %s\n' '86c0839265666147a2ea4758e553e0fe81d5c42e810ad3328137e3b98133c581' '.github/experimental/SNES_LLAPI_1.0.0_Timing-Test_20261124.rbf' | sha256sum -c - || exit 1
-    copy_file '.github/experimental/SNES_LLAPI_1.0.0_Timing-Test_20261124.rbf' "${1}/_LLAPI Enhanced/_Experimental/SNES_LLAPI_1.0.0_Timing-Test_20261124.rbf"
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
