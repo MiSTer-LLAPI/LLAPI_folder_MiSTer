@@ -448,7 +448,7 @@ with zipfile.ZipFile(archive) as package:
 JOTEGO_ENHANCED
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
-    printf '%s  %s\n' '4a6036d881d1c8ff5ea1158c626c383e85ad4f0d6c23a9e8a47a1cbc37271bd4' '.github/consoles/NeoGeo_Turbo_20261124.rbf' | sha256sum -c - || exit 1
+    printf '%s  %s\n' 'b00a98762160067238f788cdd21309d50fc9cda7241a46e247b9769cd4432fda' '.github/consoles/NeoGeo_Turbo_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/NeoGeo_Turbo_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261124.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
