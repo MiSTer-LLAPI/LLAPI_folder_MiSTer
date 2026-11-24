@@ -446,6 +446,8 @@ with zipfile.ZipFile(archive) as package:
         raise SystemExit('Jotego Enhanced archive would overwrite an existing file')
     package.extractall(target)
 JOTEGO_ENHANCED
+    printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_LLAPI_1.0.0_20261124.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/consoles/SNES_LLAPI_1.0.0_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_LLAPI_1.0.0_20261124.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
