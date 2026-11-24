@@ -439,8 +439,8 @@ from pathlib import Path
 import hashlib, sys, zipfile
 target = Path(sys.argv[1])
 packages = {
-    'Enhanced-Jotego-2.0.zip': '724d1f17f5b328bf1cf767f120db6a4c4b1da3ac55084076d4cfeba5e2cd1fb5',
-    'Enhanced-Jotego-2.1.zip': '25f0388329decfbf8aa743aa069d77e8e6f5a976b642e615063445d1b26242e5',
+    'Enhanced-Jotego-2.0.zip': '1e1711dbdf77dc1fcb1ba6aefd867d418b59344bd9471ec3c51f623f35677f6d',
+    'Enhanced-Jotego-2.1.zip': '20d2d9afd50d81aa48350ade134023e26642c7af0270a80c1a08589a3516eff7',
 }
 for name, expected in packages.items():
     archive = Path('.github') / name
