@@ -434,12 +434,24 @@ if hashlib.sha256(archive.read_bytes()).hexdigest() != 'e5b16273f4509ded1ff73615
 with zipfile.ZipFile(archive) as package:
     package.extractall(sys.argv[1])
 ENHANCED
+    python3 - "${1}/_LLAPI Enhanced" <<'JOTEGO_ENHANCED'
+from pathlib import Path
+import hashlib, sys, zipfile
+archive = Path('.github/Enhanced-Jotego-2.0.zip')
+if hashlib.sha256(archive.read_bytes()).hexdigest() != '7f0bb6b12396206dc3cd1bf32f116c4ca57a3830c207a9c177c07bb164aab77a':
+    raise SystemExit('Jotego Enhanced archive checksum mismatch')
+target = Path(sys.argv[1])
+with zipfile.ZipFile(archive) as package:
+    if any((target / name).exists() for name in package.namelist()):
+        raise SystemExit('Jotego Enhanced archive would overwrite an existing file')
+    package.extractall(target)
+JOTEGO_ENHANCED
     # Rename the assembled directory before generating the Update All index.
-    if [[ -e "${1}/_LLAPI+SNAC Enhanced" ]]; then
+    if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
         exit 1
     fi
-    mv -- "${1}/_LLAPI Enhanced" "${1}/_LLAPI+SNAC Enhanced" || exit 1
+    mv -- "${1}/_LLAPI Enhanced" "${1}/_SNAC+LLAPI Enhanced" || exit 1
 fi
 
 
