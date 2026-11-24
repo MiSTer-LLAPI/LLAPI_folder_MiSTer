@@ -448,8 +448,8 @@ with zipfile.ZipFile(archive) as package:
 JOTEGO_ENHANCED
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_LLAPI_1.0.0_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_LLAPI_1.0.0_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_LLAPI_1.0.0_20261124.rbf" || exit 1
-    printf '%s  %s\n' '90060a43b457438fe6702f9ebdbf1787e7b89768b14c1e68c90e00ffe8f78121' '.github/consoles/NeoGeo_LLAPI_1.0.0_Test_3c61163.rbf' | sha256sum -c - || exit 1
-    copy_file '.github/consoles/NeoGeo_LLAPI_1.0.0_Test_3c61163.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_LLAPI_1.0.0_Test_3c61163.rbf" || exit 1
+    printf '%s  %s\n' '90060a43b457438fe6702f9ebdbf1787e7b89768b14c1e68c90e00ffe8f78121' '.github/consoles/NeoGeo_LLAPI_1.0.0_20261124.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/consoles/NeoGeo_LLAPI_1.0.0_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_LLAPI_1.0.0_20261124.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
