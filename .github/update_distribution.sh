@@ -455,7 +455,7 @@ JOTEGO_ENHANCED
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
     printf '%s  %s\n' '4f31572a62aed779b7d0e112fe6e8f2d2afc6e3a8eb44fc553cd667428d2bd03' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/NeoGeo_Turbo_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261125.rbf" || exit 1
-    printf '%s  %s\n' 'b7fd73d851e72c2b276751a03cb14b93e16c4f88a3fafa0d34716c4a73dac498' '.github/consoles/NeoGeo_Turbo48_20261125.rbf' | sha256sum -c - || exit 1
+    printf '%s  %s\n' '4154f43db2b8f411e546c46a8a476b2836344926e0359addd562df1bcbb81156' '.github/consoles/NeoGeo_Turbo48_20261125.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/NeoGeo_Turbo48_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo48_20261125.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
