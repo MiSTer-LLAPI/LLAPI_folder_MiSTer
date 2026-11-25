@@ -453,10 +453,8 @@ for name, expected in packages.items():
 JOTEGO_ENHANCED
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
-    printf '%s  %s\n' '4f31572a62aed779b7d0e112fe6e8f2d2afc6e3a8eb44fc553cd667428d2bd03' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
+    printf '%s  %s\n' '055e5f58858e194fb08332da8aeedaab5b18e694769ea1d543f003dfd12114a8' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/NeoGeo_Turbo_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261125.rbf" || exit 1
-    printf '%s  %s\n' '4154f43db2b8f411e546c46a8a476b2836344926e0359addd562df1bcbb81156' '.github/consoles/NeoGeo_Turbo48_20261125.rbf' | sha256sum -c - || exit 1
-    copy_file '.github/consoles/NeoGeo_Turbo48_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo48_20261125.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
