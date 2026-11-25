@@ -334,14 +334,13 @@ install_goldenaxe_enhanced() (
     tmp="$(mktemp -d)"
     trap 'rm -rf "$tmp"' EXIT
     url="https://github.com/MiSTer-LLAPI/jtcores/releases/download/v1.0.0-goldenaxe-enhanced"
-    curl -fsSL "$url/jtgoldnaxe_llapi10.rbf" -o "$tmp/core"
     curl -fsSL "$url/Golden.Axe.-.LLAPI.Enhanced.1.0.mra" -o "$tmp/game"
     (cd "$tmp" && sha256sum -c <<'SUMS'
-d9edcb17b537b00f00be8d24f17805e5ec2b3013f887b2dae357b765a41a13d4  core
 79eb951f47e4d3af047906b3dcf505a04f447df5e4be75a251512e11f9faec5a  game
 SUMS
     )
-    copy_file "$tmp/core" "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
+    printf '%s  %s\n' '56567c3c2b782f8cd4fd840805693ef81f62dcd5e79ffa0b940b6e61a33618ff' '.github/arcade/jtgoldnaxe_llapi21.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jtgoldnaxe_llapi21.rbf' "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
     sed 's|<name>Golden Axe (set 6, US) (8751 317-123A)</name>|<name>Golden Axe</name>|' "$tmp/game" > "$tmp/Golden Axe.mra"
     copy_file "$tmp/Golden Axe.mra" "$target/_LLAPI Enhanced/_Arcade/Golden Axe.mra"
     rm -f "$target/_LLAPI Enhanced/_Arcade/Golden Axe - LLAPI Enhanced 1.0.mra"
@@ -451,9 +450,12 @@ for name, expected in packages.items():
             raise SystemExit(f'Duplicate Jotego Enhanced file in {name}')
         package.extractall(target)
 JOTEGO_ENHANCED
+    # Keep the public 1944 MRA and its RBF path when updating the LLAPI driver.
+    printf '%s  %s\n' '30e3b2eb779c030a2ed61fd050cfa696f0cf821b2f001713fb1d55811be8697a' '.github/arcade/jt1944ll11t1.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jt1944ll11t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
-    printf '%s  %s\n' '055e5f58858e194fb08332da8aeedaab5b18e694769ea1d543f003dfd12114a8' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
+    printf '%s  %s\n' 'c9517763e3ea103d26c2392e896b8f9708695dd46bbbb58cf77d1acbbdd3200e' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/NeoGeo_Turbo_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261125.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
