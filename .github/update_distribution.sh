@@ -339,9 +339,10 @@ install_goldenaxe_enhanced() (
 79eb951f47e4d3af047906b3dcf505a04f447df5e4be75a251512e11f9faec5a  game
 SUMS
     )
-    printf '%s  %s\n' '56567c3c2b782f8cd4fd840805693ef81f62dcd5e79ffa0b940b6e61a33618ff' '.github/arcade/jtgoldnaxe_llapi21.rbf' | sha256sum -c - || exit 1
-    copy_file '.github/arcade/jtgoldnaxe_llapi21.rbf' "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
-    sed 's|<name>Golden Axe (set 6, US) (8751 317-123A)</name>|<name>Golden Axe</name>|' "$tmp/game" > "$tmp/Golden Axe.mra"
+    printf '%s  %s\n' '77622f19e872190ba502c184a6ca7b4dae65ac2e1fdf0f9e66e9b8cb59e8bcd7' '.github/arcade/jtgoldnaxe_llapi21.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jtgoldnaxe_llapi21.rbf' "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi21.rbf"
+    rm -f "$target/_LLAPI Enhanced/cores/jtgoldnaxe_llapi10.rbf"
+    sed -e 's|<name>Golden Axe (set 6, US) (8751 317-123A)</name>|<name>Golden Axe</name>|' -e 's|<rbf>jtgoldnaxe_llapi10</rbf>|<rbf>jtgoldnaxe_llapi21</rbf>|' "$tmp/game" > "$tmp/Golden Axe.mra"
     copy_file "$tmp/Golden Axe.mra" "$target/_LLAPI Enhanced/_Arcade/Golden Axe.mra"
     rm -f "$target/_LLAPI Enhanced/_Arcade/Golden Axe - LLAPI Enhanced 1.0.mra"
 )
