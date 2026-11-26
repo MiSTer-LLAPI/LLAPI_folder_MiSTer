@@ -476,6 +476,15 @@ JOTEGO_ENHANCED
     copy_file '.github/arcade/Insector X (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Insector X (World).mra" || exit 1
     printf '%s  %s\n' 'd2d58f355b3338080496c66dd1459eaafa565a248ea842a5e5e56ed8e3fcebc9' '.github/arcade/Kageki (World).mra' | sha256sum -c - || exit 1
     copy_file '.github/arcade/Kageki (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Kageki (World).mra" || exit 1
+    # Rastan family 2.1 / LLAPI 1.2: three new games, preserving Rastan 1.0.
+    printf '%s  %s\n' '50996f4de1be9e3ca01567c1c385b65bf469cf70acd194f514fc726670a57bb5' .github/arcade/jtrastan_llapi21.rbf | sha256sum -c - || exit 1
+    copy_file .github/arcade/jtrastan_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jtrastan_llapi21.rbf" || exit 1
+    printf '%s  %s\n' '53303e0b40e3973f36cb58b39e481edddd0af399b5feaa999c44a1c53dec7f82' '.github/arcade/Operation Wolf (World, rev 2, set 1).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Operation Wolf (World, rev 2, set 1).mra' "${1}/_LLAPI Enhanced/_Arcade/Operation Wolf (World, rev 2, set 1).mra" || exit 1
+    printf '%s  %s\n' 'c5405b46fd5dea4766efef50fe29d67725fc78ff8aa785139eed1d9c7f9fdad9' '.github/arcade/Rainbow Islands (rev 1).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Rainbow Islands (rev 1).mra' "${1}/_LLAPI Enhanced/_Arcade/Rainbow Islands (rev 1).mra" || exit 1
+    printf '%s  %s\n' '838fbcf8463414b8fc4ce0797bc22438cff924f777a20d565dbea6954f2086cf' '.github/arcade/Rainbow Islands - Extra Version.mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Rainbow Islands - Extra Version.mra' "${1}/_LLAPI Enhanced/_Arcade/Rainbow Islands - Extra Version.mra" || exit 1
     # Keep the public 1944 MRA and its RBF path when updating the LLAPI driver.
     printf '%s  %s\n' '08575ee5683bef6a90959bb9077f826060f55c83bc669ff24695f8f9710086f9' '.github/arcade/jt1944ll12t1.rbf' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jt1944ll12t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
