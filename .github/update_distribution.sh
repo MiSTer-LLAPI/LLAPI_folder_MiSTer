@@ -457,6 +457,10 @@ JOTEGO_ENHANCED
     printf '%s  %s\n' '05d7e7484fff0571d138ee1bf8904524e64c09092281754ebe45f732a5344595' '.github/arcade/Shadow Warriors (World, set 1).mra' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jtgaiden_llapi21.rbf' "${1}/_LLAPI Enhanced/cores/jtgaiden_llapi21.rbf"
     copy_file '.github/arcade/Shadow Warriors (World, set 1).mra' "${1}/_LLAPI Enhanced/_Arcade/Shadow Warriors (World, set 1).mra"
+    # Road Fighter / Hyper Sports 2.1 with LLAPI 1.2. The existing Hyper Sports
+    # MRA is byte-identical to the CI artifact and already targets this core.
+    printf '%s  %s\n' '2d810bea18211d3321e3dc95f86f35a71c27b63e1dac4d4291f6c12b02fba134' '.github/arcade/jtroadf_llapi21.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jtroadf_llapi21.rbf' "${1}/_LLAPI Enhanced/cores/jtroadf_llapi21.rbf"
     # Keep the public 1944 MRA and its RBF path when updating the LLAPI driver.
     printf '%s  %s\n' '08575ee5683bef6a90959bb9077f826060f55c83bc669ff24695f8f9710086f9' '.github/arcade/jt1944ll12t1.rbf' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jt1944ll12t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
