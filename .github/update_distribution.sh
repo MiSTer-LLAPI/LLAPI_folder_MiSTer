@@ -461,6 +461,21 @@ JOTEGO_ENHANCED
     # MRA is byte-identical to the CI artifact and already targets this core.
     printf '%s  %s\n' '2d810bea18211d3321e3dc95f86f35a71c27b63e1dac4d4291f6c12b02fba134' '.github/arcade/jtroadf_llapi21.rbf' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jtroadf_llapi21.rbf' "${1}/_LLAPI Enhanced/cores/jtroadf_llapi21.rbf"
+    # Kiwi Enhanced 2.1 / LLAPI 1.2: six new official games. Preserve TNZS 1.0.
+    printf '%s  %s\n' '1934d2335a28cfa34ef3cd5bb1a667a8b4424a5e60de824fe8b90d6571e159f1' '.github/arcade/jtkiwi_llapi21.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jtkiwi_llapi21.rbf' "${1}/_LLAPI Enhanced/cores/jtkiwi_llapi21.rbf" || exit 1
+    printf '%s  %s\n' 'e6d45a2ec6c866bb4d1a36d15f7d227ec9ba67f6da53535e58d04f7d669389fd' '.github/arcade/Arkanoid - Revenge of DOH (World).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Arkanoid - Revenge of DOH (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Arkanoid - Revenge of DOH (World).mra" || exit 1
+    printf '%s  %s\n' '0589ec68ef06b415f3ab084d14a23c98dbf91ca610e6aa59f4772ebe4cf0e7e6' '.github/arcade/Chuka Taisen (World) (P0-028-A PCB).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Chuka Taisen (World) (P0-028-A PCB).mra' "${1}/_LLAPI Enhanced/_Arcade/Chuka Taisen (World) (P0-028-A PCB).mra" || exit 1
+    printf '%s  %s\n' '4662fe4dd18740bb6d0f4064cbf633653c6b79c30799802a8c5bfa1621f8472e' ".github/arcade/Dr. Toppel's Adventure (World).mra" | sha256sum -c - || exit 1
+    copy_file ".github/arcade/Dr. Toppel's Adventure (World).mra" "${1}/_LLAPI Enhanced/_Arcade/Dr. Toppel's Adventure (World).mra" || exit 1
+    printf '%s  %s\n' '407ee5bc1f95956bd99d9ea18dbb1365e65b820cb9fcfd5bd42b8d734dfcff0e' '.github/arcade/Extermination (World).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Extermination (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Extermination (World).mra" || exit 1
+    printf '%s  %s\n' 'a5275a51af46f254e910ec23bb6a8cb29418bae3f5fc0222e66584cbb1869c5c' '.github/arcade/Insector X (World).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Insector X (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Insector X (World).mra" || exit 1
+    printf '%s  %s\n' 'd2d58f355b3338080496c66dd1459eaafa565a248ea842a5e5e56ed8e3fcebc9' '.github/arcade/Kageki (World).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Kageki (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Kageki (World).mra" || exit 1
     # Keep the public 1944 MRA and its RBF path when updating the LLAPI driver.
     printf '%s  %s\n' '08575ee5683bef6a90959bb9077f826060f55c83bc669ff24695f8f9710086f9' '.github/arcade/jt1944ll12t1.rbf' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jt1944ll12t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
