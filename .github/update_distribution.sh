@@ -451,6 +451,12 @@ for name, expected in packages.items():
             raise SystemExit(f'Duplicate Jotego Enhanced file in {name}')
         package.extractall(target)
 JOTEGO_ENHANCED
+    # Gaiden 2.1 / LLAPI 1.2: replace the shared family core and add the
+    # verified World set. The old llapi10 core still serves Ninja Gaiden (US).
+    printf '%s  %s\n' '4b1d032c529a7486e807dbaa1cb95e98e0ed69ee3d8ff1e87c9f6551c3f36a3c' '.github/arcade/jtgaiden_llapi21.rbf' | sha256sum -c - || exit 1
+    printf '%s  %s\n' '05d7e7484fff0571d138ee1bf8904524e64c09092281754ebe45f732a5344595' '.github/arcade/Shadow Warriors (World, set 1).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/jtgaiden_llapi21.rbf' "${1}/_LLAPI Enhanced/cores/jtgaiden_llapi21.rbf"
+    copy_file '.github/arcade/Shadow Warriors (World, set 1).mra' "${1}/_LLAPI Enhanced/_Arcade/Shadow Warriors (World, set 1).mra"
     # Keep the public 1944 MRA and its RBF path when updating the LLAPI driver.
     printf '%s  %s\n' '08575ee5683bef6a90959bb9077f826060f55c83bc669ff24695f8f9710086f9' '.github/arcade/jt1944ll12t1.rbf' | sha256sum -c - || exit 1
     copy_file '.github/arcade/jt1944ll12t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
