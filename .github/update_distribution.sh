@@ -439,7 +439,7 @@ import hashlib, sys, zipfile
 target = Path(sys.argv[1])
 packages = {
     'Enhanced-Jotego-2.0.zip': '1e1711dbdf77dc1fcb1ba6aefd867d418b59344bd9471ec3c51f623f35677f6d',
-    'Enhanced-Jotego-2.1.zip': '67b5a2be20f4dd13e761ea4dd82e83e9f14e49c248ca1feb8f4d4b44fb323e24',
+    'Enhanced-Jotego-2.1.zip': '2d9c1b9ed57077580f9acd814921cda599336024c7a2be5a060e8d479d67e117',
 }
 for name, expected in packages.items():
     archive = Path('.github') / name
