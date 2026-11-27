@@ -459,6 +459,10 @@ JOTEGO_ENHANCED
     copy_file '.github/arcade/Final Fight.mra' "${1}/_LLAPI Enhanced/_Arcade/Final Fight.mra" || exit 1
     printf '%s  %s\n' '0d1911d731b2e440065925e3b79ccc36dbf11cdfdab916dc803f0150fe4233e9' .github/arcade/jtcps1_llapi21.rbf | sha256sum -c - || exit 1
     copy_file .github/arcade/jtcps1_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jtcps1_llapi21.rbf" || exit 1
+    printf '%s  %s\n' 'ed1b545982a258dd9527c87271c4718f66c65222537b1bc55554e7d262b7897e' '.github/arcade/Teenage Mutant Ninja Turtles (World 4 Players, version X).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Teenage Mutant Ninja Turtles (World 4 Players, version X).mra' "${1}/_LLAPI Enhanced/_Arcade/Teenage Mutant Ninja Turtles (World 4 Players, version X).mra" || exit 1
+    printf '%s  %s\n' '3814d7013f975b23917d60449c20c425b80b8e9d292917ce599a0e5055459092' .github/arcade/jttmnt_llapi21.rbf | sha256sum -c - || exit 1
+    copy_file .github/arcade/jttmnt_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jttmnt_llapi21.rbf" || exit 1
     # Gaiden 2.1 / LLAPI 1.2: replace the shared family core and add the
     # verified World set. The old llapi10 core still serves Ninja Gaiden (US).
     printf '%s  %s\n' '4b1d032c529a7486e807dbaa1cb95e98e0ed69ee3d8ff1e87c9f6551c3f36a3c' '.github/arcade/jtgaiden_llapi21.rbf' | sha256sum -c - || exit 1
