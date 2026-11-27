@@ -477,6 +477,14 @@ JOTEGO_ENHANCED
     printf '%s  %s\n' 'd2d58f355b3338080496c66dd1459eaafa565a248ea842a5e5e56ed8e3fcebc9' '.github/arcade/Kageki (World).mra' | sha256sum -c - || exit 1
     copy_file '.github/arcade/Kageki (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Kageki (World).mra" || exit 1
     # Rastan family 2.1 / LLAPI 1.2: three new games, preserving Rastan 1.0.
+    printf '%s  %s\n' '0c7b19f282fbc0b980c333af0e06ed50eebac20a3c9b4725ba816e9cf0f38121' '.github/arcade/Golfing Greats (World, version L).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Golfing Greats (World, version L).mra' "${1}/_LLAPI Enhanced/_Arcade/Golfing Greats (World, version L).mra" || exit 1
+    printf '%s  %s\n' 'e5009a9419b8fa5ac9b118fe9ccd2ea1912f76578b18741bd896d582d8224952' '.github/arcade/Lightning Fighters (World).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Lightning Fighters (World).mra' "${1}/_LLAPI Enhanced/_Arcade/Lightning Fighters (World).mra" || exit 1
+    printf '%s  %s\n' '5b7167e136d290ada1c7ff6b6f7093ba4b0107751dfb05005b1eddf85ca3f6f5' '.github/arcade/Teenage Mutant Ninja Turtles Turtles in Time (4 Players ver UAA).mra' | sha256sum -c - || exit 1
+    copy_file '.github/arcade/Teenage Mutant Ninja Turtles Turtles in Time (4 Players ver UAA).mra' "${1}/_LLAPI Enhanced/_Arcade/Teenage Mutant Ninja Turtles Turtles in Time (4 Players ver UAA).mra" || exit 1
+    printf '%s  %s\n' 'a5fc958f4ce961991f2d92ca79eeb3714d38e9cd3adf2a59e3fbda20fa5cc084' .github/arcade/jtriders_llapi21.rbf | sha256sum -c - || exit 1
+    copy_file .github/arcade/jtriders_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jtriders_llapi21.rbf" || exit 1
     printf '%s  %s\n' '50996f4de1be9e3ca01567c1c385b65bf469cf70acd194f514fc726670a57bb5' .github/arcade/jtrastan_llapi21.rbf | sha256sum -c - || exit 1
     copy_file .github/arcade/jtrastan_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jtrastan_llapi21.rbf" || exit 1
     printf '%s  %s\n' '53303e0b40e3973f36cb58b39e481edddd0af399b5feaa999c44a1c53dec7f82' '.github/arcade/Operation Wolf (World, rev 2, set 1).mra' | sha256sum -c - || exit 1
