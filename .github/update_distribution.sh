@@ -451,6 +451,10 @@ for name, expected in packages.items():
             raise SystemExit(f'Duplicate Jotego Enhanced file in {name}')
         package.extractall(target)
 JOTEGO_ENHANCED
+    printf '%s  %s\n' '8ad6df2d8341090e8db40a03d60c8bccf77d65732ccf898158117e5395ca8f6e' .github/arcade/Toki.mra | sha256sum -c - || exit 1
+    copy_file .github/arcade/Toki.mra "${1}/_LLAPI Enhanced/_Arcade/Toki.mra" || exit 1
+    printf '%s  %s\n' 'b25f38edd9a4bd0854f15f4e1c015f3cd05368b6aa67b9d6e0f1bf4526fffffb' .github/arcade/jttoki_llapi21.rbf | sha256sum -c - || exit 1
+    copy_file .github/arcade/jttoki_llapi21.rbf "${1}/_LLAPI Enhanced/cores/jttoki_llapi21.rbf" || exit 1
     # Gaiden 2.1 / LLAPI 1.2: replace the shared family core and add the
     # verified World set. The old llapi10 core still serves Ninja Gaiden (US).
     printf '%s  %s\n' '4b1d032c529a7486e807dbaa1cb95e98e0ed69ee3d8ff1e87c9f6551c3f36a3c' '.github/arcade/jtgaiden_llapi21.rbf' | sha256sum -c - || exit 1
