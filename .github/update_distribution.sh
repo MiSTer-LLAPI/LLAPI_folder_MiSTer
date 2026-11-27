@@ -490,8 +490,8 @@ JOTEGO_ENHANCED
     copy_file '.github/arcade/jt1944ll12t1.rbf' "${1}/_LLAPI Enhanced/cores/jt1944_llapi050.rbf" || exit 1
     printf '%s  %s\n' '253363c3f855ac61eb441c3ea3146c310d2d90598c21fce13fa1ac611eef1bc9' '.github/consoles/SNES_20261124.rbf' | sha256sum -c - || exit 1
     copy_file '.github/consoles/SNES_20261124.rbf' "${1}/_LLAPI Enhanced/_Console/SNES_20261124.rbf" || exit 1
-    printf '%s  %s\n' '55f1ed0a62ba6ff84474f1c5e2dd0ef3ed70830f4d6517eec2d914fcd7c17164' '.github/consoles/NeoGeo_Turbo_20261125.rbf' | sha256sum -c - || exit 1
-    copy_file '.github/consoles/NeoGeo_Turbo_20261125.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261125.rbf" || exit 1
+    printf '%s  %s\n' 'd79c6f723cc6445743eee52ef3f2cc45d2b534166459507bcb9b8e07e0e5da85' '.github/consoles/NeoGeo_Turbo_20261127.rbf' | sha256sum -c - || exit 1
+    copy_file '.github/consoles/NeoGeo_Turbo_20261127.rbf' "${1}/_LLAPI Enhanced/_Console/NeoGeo_Turbo_20261127.rbf" || exit 1
     # Rename the assembled directory before generating the Update All index.
     if [[ -e "${1}/_SNAC+LLAPI Enhanced" ]]; then
         echo "Enhanced catalog destination already exists" >&2
